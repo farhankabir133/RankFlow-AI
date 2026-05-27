@@ -22,60 +22,78 @@ interface ExamEngineProps {
   onTriggerTutor: (subject: string, topic: string) => void;
 }
 
-// Full BCS 10-domain detailed syllabus
+// Full BCS 10-domain detailed syllabus with rich, complete topics
 const bcsSyllabus = [
   {
     name: "১. বাংলা ভাষা ও সাহিত্য",
-    marks: 30,
+    marks: 35,
     color: "from-cyan-500 to-blue-500",
     topics: [
-      { name: "প্রয়োগ-অপপ্রয়োগ ও বানান শুদ্ধি", bcsNo: "প্রয়োগ-অপপ্রয়োগ, বানান ও বাক্য শুদ্ধি", mastery: 82, trend: "+4%" },
-      { name: "শব্দ, পদ, প্রত্যয় ও সমাস", bcsNo: "পরিভাষা, সমার্থক-বিপরীতার্থক, ধ্বনি, সন্ধি ও সমাস", mastery: 45, trend: "-2%" },
-      { name: "প্রাচীন ও মধ্যযুগ (সাহিত্য)", bcsNo: "চর্যাপদ, মঙ্গলকাব্য ও মধ্যযুগের নিদর্শন", mastery: 70, trend: "+12%" },
-      { name: "আধুনিক যুগ (১৮০০-বর্তমান)", bcsNo: "রবীন্দ্রনাথ, নজরুল ও আধুনিক সাহিত্য ধারা", mastery: 65, trend: "+0%" }
+      { name: "প্রয়োগ-অপপ্রয়োগ, বানান ও বাক্য শুদ্ধি", bcsNo: "ভাষা (১৫ নম্বর): প্রয়োগ-অপপ্রয়োগ, বানান ও বাক্য শুদ্ধি", mastery: 82, trend: "+4%" },
+      { name: "পরিভাষা, সমার্থক ও বিপরীতার্থক শব্দ", bcsNo: "ভাষা (১৫ নম্বর): পরিভাষা, সমার্থক ও বিপরীতার্থক শব্দ", mastery: 75, trend: "+2%" },
+      { name: "ধ্বনি, বর্ণ ও শব্দ", bcsNo: "ভাষা (১৫ নম্বর): ধ্বনি, বর্ণ, শব্দ", mastery: 80, trend: "+3%" },
+      { name: "পদ ও বাক্য", bcsNo: "ভাষা (১৫ নম্বর): পদ, বাক্য", mastery: 78, trend: "+5%" },
+      { name: "প্রত্যয়, সন্ধি ও সমাস", bcsNo: "ভাষা (১৫ নম্বর): প্রত্যয়, সন্ধি ও সমাস", mastery: 71, trend: "+1%" },
+      { name: "ক. প্রাচীন ও মধ্যযুগ (সাহিত্য)", bcsNo: "সাহিত্য (১৫ নম্বর): ক. প্রাচীন ও মধ্যযুগ (০৫ নম্বর)", mastery: 70, trend: "+12%" },
+      { name: "খ. আধুনিক যুগ (১৮০০-বর্তমান পর্যন্ত) (সাহিত্য)", bcsNo: "সাহিত্য (১৫ নম্বর): খ. আধুনিক যুগ (১৮০০-বর্তমান পর্যন্ত) (১০ নম্বর)", mastery: 65, trend: "+0%" }
     ]
   },
   {
     name: "২. English Language & Literature",
-    marks: 30,
+    marks: 35,
     color: "from-blue-500 to-indigo-500",
     topics: [
-      { name: "Parts of Speech & Clauses", bcsNo: "Nouns, Verbs, Linking Verbs, Clauses", mastery: 78, trend: "+5%" },
-      { name: "Idioms, Phrases & Sentence", bcsNo: "Meanings, Transformations & Voices", mastery: 58, trend: "+10%" },
-      { name: "Corrections & Spellings", bcsNo: "Subject-Verb Agreement, Tense, Diction", mastery: 42, trend: "-6%" },
-      { name: "English Literature History", bcsNo: "Elizabethan to 21st Century & Quotations", mastery: 60, trend: "+8%" }
+      { name: "A. Parts of Speech: Noun & Pronoun", bcsNo: "Language: Parts of Speech: The Noun (Determiner, Gender, Number); The Pronoun", mastery: 78, trend: "+5%" },
+      { name: "A. Parts of Speech: The Verb & Modals", bcsNo: "Language: Parts of Speech: The Verb (Finite, Non-finite, Linking, Phrasal, Modals)", mastery: 71, trend: "+3%" },
+      { name: "A. Parts of Speech: Adjective, Adverb, Preposition & Conjunction", bcsNo: "Language: Parts of Speech: The Adjective, Adverb, Preposition, Conjunction", mastery: 74, trend: "+4%" },
+      { name: "B. Idioms & Phrases", bcsNo: "Language: Meanings of Phrases, Kinds of Phrases, Identifying Phrases.", mastery: 58, trend: "+10%" },
+      { name: "C. Clauses", bcsNo: "Language: The Principal Clause, The Subordinate Clause (Noun, Adjective, Adverbial & its types).", mastery: 70, trend: "+8%" },
+      { name: "D. Corrections", bcsNo: "Language: Corrections (The Tense, Verb, Preposition, Determiner, Gender, Number, Subject-Verb Agreement)", mastery: 42, trend: "-6%" },
+      { name: "E. Sentences & Transformations", bcsNo: "Language: Sentences and transformations (Simple, Compound, Complex, Active/Passive Voice, Degrees)", mastery: 72, trend: "+6%" },
+      { name: "F. Words: Meanings, Synonyms & Antonyms", bcsNo: "Language: Words: Meanings, Synonyms, Antonyms", mastery: 48, trend: "-4%" },
+      { name: "F. Words: Spellings & Formations", bcsNo: "Language: Words: Spellings, Prefix and Suffix word formations", mastery: 63, trend: "+2%" },
+      { name: "G. Composition", bcsNo: "Language: Composition: Names of parts of paragraphs/letters/applications", mastery: 60, trend: "+8%" },
+      { name: "H. English Literature", bcsNo: "Literature: Writers from Elizabethan period to the 21st Century. Quotations from drama/poetry of different ages.", mastery: 53, trend: "+4%" }
     ]
   },
   {
     name: "৩. বাংলাদেশ বিষয়াবলি",
-    marks: 25,
+    marks: 30,
     color: "from-emerald-500 to-teal-500",
     topics: [
-      { name: "জাতীয় বিষয়াবলি ও মুক্তিযুদ্ধ", bcsNo: "প্রাচীনকাল হতে সমসাময়িক ইতিহাস, ১৯৫২ ও ১৯৭১", mastery: 90, trend: "+1%" },
-      { name: "কৃষিজ সম্পদ, খনিজ ও জাতীয় আয়", bcsNo: "শস্য উৎপাদন, জাতীয় আয়-ব্যয়, দারিদ্র্য বিমোচন", mastery: 72, trend: "+3%" },
-      { name: "বাংলাদেশের সংবিধান ও সংশোধন", bcsNo: "মৌলিক অধিকার, সংশোধনীসমূহ ও রাষ্ট্র পরিচালনা", mastery: 85, trend: "+15%" },
-      { name: "সরকার ও রাজনৈতিক ব্যবস্থা", bcsNo: "আইন, শাসন ও বিচার বিভাগ, সুশীল সমাজ ও দলসমূহ", mastery: 64, trend: "-4%" }
+      { name: "১. বাংলাদেশের জাতীয় বিষয়াবলি", bcsNo: "প্রাচীনকাল হতে সম-সাময়িক কালের ইতিহাস, কৃষ্টি ও সংস্কৃতি। ভাষা আন্দোলন এবং মুক্তিযুদ্ধের পটভূমি ও ঘটনাপ্রবাহ । (০৬ নম্বর)", mastery: 80, trend: "+3%" },
+      { name: "২. বাংলাদেশের কৃষিজ সম্পদ", bcsNo: "শস্য উৎপাদন এবং এর বহুমুখীকরণ, খাদ্য উৎপাদন, মৎস্য, গবাদিপশু ও হাঁস-মুরগি পালন এবং এ সংক্রান্ত বনজ ও খনিজ সম্পদ উন্নয়ন ইত্যাদি । (০৩ নম্বর)", mastery: 72, trend: "+5%" },
+      { name: "৩. বাংলাদেশের জনসংখ্যা, আদমশুমারি, জাতি, গোষ্ঠী ও উপজাতি", bcsNo: "জনসংখ্যা কাঠামো, আদমশুমারি, বিভিন্ন জাতি, গোষ্ঠী ও উপজাতির ভৌগোলিক অবস্থান, সামাজিক-সাংস্কৃতিক জীবনধারা ইত্যাদি । (০৩ নম্বর)", mastery: 68, trend: "+2%" },
+      { name: "৪. বাংলাদেশের অর্থনীতি", bcsNo: "উন্নয়ন পরিকল্পনা (দীর্ঘমেয়াদী ও পঞ্চবার্ষিকী), বাজেট ও কর নীতি, জিডিপি ও প্রবৃদ্ধি, দারিদ্র্য বিমোচন, বৈদেশিক সাহায্য ও রেমিট্যান্স ইত্যাদি । (০৩ নম্বর)", mastery: 60, trend: "+8%" },
+      { name: "৫. বাংলাদেশের শিল্প ও বাণিজ্য", bcsNo: "শিল্প উৎপাদন, পণ্য আমদানি ও রপ্তানি, গার্মেন্টস শিল্প, বৈদেশিক বাণিজ্য ও রেমিট্যান্স, ব্যাংক ও বীমা ব্যবস্থাপনা ইত্যাদি । (০৩ নম্বর)", mastery: 77, trend: "+5%" },
+      { name: "৬. বাংলাদেশের সংবিধান", bcsNo: "প্রস্তাবনা ও বৈশিষ্ট্য, মৌলিক অধিকারসহ রাষ্ট্র পরিচালনার মূলনীতিসমূহ, সংবিধানের সংশোধনীসমূহ । (০৩ নম্বর)", mastery: 85, trend: "+15%" },
+      { name: "৭. বাংলাদেশের রাজনৈতিক ব্যবস্থা", bcsNo: "রাজনৈতিক দলসমূহের পঠন, ভূমিকা ও কার্যক্রম, ক্ষমতাসীন ও বিরোধী দলের পারস্পরিক সম্পর্কাদি, সুশীল সমাজ ও চাপ সৃষ্টিকারী গোষ্ঠীসমূহ এবং এদের ভূমিকা । (০৩ নম্বর)", mastery: 64, trend: "-4%" },
+      { name: "৮. বাংলাদেশের সরকার ব্যবস্থা", bcsNo: "আইন, শাসন ও বিচার বিভাগসমূহ, আইন প্রণয়ন, নীতি নির্ধারণ, জাতীয় ও স্থানীয় পর্যায়ের প্রশাসনিক ব্যবস্থাপনা কাঠামো, প্রশাসনিক পুনর্গঠন ও সংস্কার । (০৩ নম্বর)", mastery: 74, trend: "+10%" },
+      { name: "৯. বাংলাদেশের জাতীয় অর্জন, বিশিষ্ট ব্যক্তিত্ব ও গুরুত্বপূর্ণ প্রতিষ্ঠান", bcsNo: "জাতীয় অর্জনসমূহ, বিশিষ্ট ব্যক্তিত্ব, গুরুত্বপূর্ণ প্রতিষ্ঠান, খেলাধুলা, বিশিষ্ট ল্যান্ডমার্ক ও দিবসসমূহ ইত্যাদি । (০৩ নম্বর)", mastery: 70, trend: "+6%" }
     ]
   },
   {
     name: "৪. আন্তর্জাতিক বিষয়াবলি",
-    marks: 25,
+    marks: 20,
     color: "from-teal-500 to-cyan-500",
     topics: [
-      { name: "ভূ-রাজনীতি ও আন্তর্জাতিক ব্যবস্থা", bcsNo: "বৈশ্বিক ইতিহাস ও আঞ্চলিক ক্ষমতা সম্পর্ক", mastery: 50, trend: "+11%" },
-      { name: "আন্তর্জাতিক নিরাপত্তা ও ক্ষমতা দন্দ্ব", bcsNo: "সামরিক ভারসাম্য, চুক্তি ও সাম্প্রতিক ঘটনাবলি", mastery: 55, trend: "+5%" },
-      { name: "আন্তর্জাতিক পরিবেশ ও কূটনীতি", bcsNo: "বৈশ্বিক জলবায়ু ইস্যু, সম্মেলন ও কূটনীতি", mastery: 68, trend: "+2%" },
-      { name: "আন্তর্জাতিক সংস্থা ও অর্থনীতি", bcsNo: "UN, WB, IMF, WTO ও বিশ্ব অর্থনৈতিক ব্যাংকসমূহ", mastery: 48, trend: "-8%" }
+      { name: "১. বৈশ্বিক ইতিহাস, আঞ্চলিক ও আন্তর্জাতিক ব্যবস্থা, ভূ-রাজনীতি", bcsNo: "বৈশ্বিক ইতিহাস, আঞ্চলিক ও আন্তর্জাতিক ব্যবস্থা, ভূ-রাজনীতি (০৫ নম্বর)", mastery: 50, trend: "+11%" },
+      { name: "২. আন্তর্জাতিক নিরাপত্তা ও আন্তরাষ্ট্রীয় ক্ষমতা সম্পর্ক", bcsNo: "আন্তর্জাতিক নিরাপত্তা ও আন্তরাষ্ট্রীয় ক্ষমতা সম্পর্ক (০৫ নম্বর)", mastery: 55, trend: "+5%" },
+      { name: "৩. বিশ্বের সাম্প্রতিক ও চলমান ঘটনাপ্রবাহ", bcsNo: "বিশ্বের সাম্প্রতিক ও চলমান ঘটনাপ্রবাহ (০৫ নম্বর)", mastery: 68, trend: "+2%" },
+      { name: "৪. আন্তর্জাতিক পরিবেশগত ইস্যু ও কূটনীতি", bcsNo: "আন্তর্জাতিক পরিবেশগত ইস্যু ও কূটনীতি (০৫ নম্বর)", mastery: 48, trend: "-8%" },
+      { name: "৫. আন্তর্জাতিক সংগঠনসমূহ এবং বৈশ্বিক অর্থনৈতিক প্রতিষ্ঠানাদি", bcsNo: "আন্তর্জাতিক সংগঠনসমূহ এবং বৈশ্বিক অর্থনৈতিক প্রতিষ্ঠানাদি (০৫ নম্বর)", mastery: 73, trend: "+4%" }
     ]
   },
   {
-    name: "৫. ভূগোল, পরিবেশ ও দুর্যোগ ব্যবস্থাপনা",
+    name: "৫. ভূগোল (বাংলাদেশ ও বিশ্ব), পরিবেশ ও দুর্যোগ ব্যবস্থাপনা",
     marks: 10,
     color: "from-cyan-600 to-teal-600",
     topics: [
-      { name: "ভৌগোলিক অবস্থান ও সীমানা গুরুত্ব", bcsNo: "ভূ-প্রাকৃতিক সীমানা, সম্পদের বণ্টন ও এলাকা", mastery: 76, trend: "+3%" },
-      { name: "পরিবেশ পরিবর্তন ও বৈশ্বিক প্রভাব", bcsNo: "আবহাওয়া ও জলবায়ু নিয়ামক, দীর্ঘমেয়াদী প্রভাব", mastery: 62, trend: "+4%" },
-      { name: "প্রাকৃতিক দুর্যোগ ও ব্যবস্থাপনাকৌশল", bcsNo: "দুর্যোগের ধরন, অভিযোজন ও প্রশমন নীতি", mastery: 80, trend: "+0%" }
+      { name: "১. ভৌগোলিক অবস্থান ও গুরুত্ব", bcsNo: "বাংলাদেশ ও অঞ্চলভিত্তিক ভৌগোলিক অবস্থান, সীমানা, পারিবেশিক, আর্থ-সামাজিক ও ভূ-রাজনৈতিক গুরুত্ব । (০২ নম্বর)", mastery: 76, trend: "+3%" },
+      { name: "২. ভৌত পরিবেশ ও সম্পদের বণ্টন", bcsNo: "অঞ্চলভিত্তিক ভৌত পরিবেশ (ভূ-প্রাকৃতিক), সম্পদের বণ্টন ও গুরুত্ব । (০২ নম্বর)", mastery: 62, trend: "+4%" },
+      { name: "৩. বাংলাদেশের পরিবেশ: প্রকৃতি ও সম্পদ", bcsNo: "বাংলাদেশের পরিবেশ: প্রকৃতি ও সম্পদ, প্রধান চ্যালেঞ্জসমূহ । (০২ নম্বর)", mastery: 80, trend: "+0%" },
+      { name: "৪. বাংলাদেশ ও বৈশ্বিক পরিবেশ পরিবর্তন", bcsNo: "বাংলাদেশ ও বৈশ্বিক পরিবেশ পরিবর্তন: আবহাওয়া ও জলবায়ু নিয়ামকসমূহ এবং সেক্টরভিত্তিক প্রভাব । (০২ নম্বর)", mastery: 60, trend: "-2%" },
+      { name: "৫. প্রাকৃতিক দুর্যোগ ও ব্যবস্থাপনা", bcsNo: "প্রাকৃতিক দুর্যোগ ও ব্যবস্থাপনা: দুর্যোগের ধরন, প্রকৃতি ও ব্যবস্থাপনা । (০২ নম্বর)", mastery: 66, trend: "+5%" }
     ]
   },
   {
@@ -83,9 +101,9 @@ const bcsSyllabus = [
     marks: 15,
     color: "from-indigo-500 to-purple-500",
     topics: [
-      { name: "ভৌত বিজ্ঞান (পদার্থ ও রসায়ন)", bcsNo: "এটমের গঠন, আলো, তাপ, চল তড়িৎ ও অজৈব যৌগ", mastery: 65, trend: "+2%" },
-      { name: "জীব বিজ্ঞান (মানবদেহ ও উদ্ভিদ)", bcsNo: "জেনেটিকস, রোগজীবাণু, পুষ্টি, রক্ত ও ভিটামিনের কাজ", mastery: 74, trend: "+10%" },
-      { name: "আধুনিক বিজ্ঞান ও সৃষ্টিতত্ত্ব", bcsNo: "কসমিক রে, ব্ল্যাক হোল, সাইক্লোন, ভ্যাকসিনেশন ও আইসি", mastery: 59, trend: "-2%" }
+      { name: "ভৌত বিজ্ঞান", bcsNo: "ভৌত বিজ্ঞান- পদার্থের অবস্থা, এটমের গঠন, কার্বনের বহুমুখী ব্যবহার, এসিড, ক্ষার, লবণ ইত্যাদি। (০৫ নম্বর)", mastery: 65, trend: "+2%" },
+      { name: "জীব বিজ্ঞান", bcsNo: "জীব বিজ্ঞান- পদার্থের জীববিজ্ঞান-বিষয়ক ধর্ম, টিস্যু, জেনেটিকস, জীববৈচিত্র্য ইত্যাদি। (০৫ নম্বর)", mastery: 74, trend: "+10%" },
+      { name: "আধুনিক বিজ্ঞান", bcsNo: "আধুনিক বিজ্ঞান- পৃথিবী সৃষ্টির ইতিহাস, কসমিক রে, ব্লাক হোল, হিগের কণা ইত্যাদি। (০৫ নম্বর)", mastery: 68, trend: "+4%" }
     ]
   },
   {
@@ -93,21 +111,21 @@ const bcsSyllabus = [
     marks: 15,
     color: "from-purple-500 to-fuchsia-500",
     topics: [
-      { name: "কম্পিউটারের অঙ্গসংগঠন ও পেরিফেরালস", bcsNo: "CPU, ALU, Number Systems, OS ও ভাইরাস", mastery: 77, trend: "+9%" },
-      { name: "নেটওয়ার্ক ও আধুনিক তথ্যপ্রযুক্তি", bcsNo: "2G/3G/4G, Computer Network, Cloud ও ইন্টারনেট", mastery: 52, trend: "+12%" },
-      { name: "সোশ্যাল মিডিয়া, ই-কমার্স ও সাইবার ক্রাইম", bcsNo: "E-Commerce, Social Nets, রোবটিক্স ও সাইবার ক্রাইম", mastery: 84, trend: "+3%" }
+      { name: "কম্পিউটার (অঙ্গসংগঠন ও পেরিফেরালস)", bcsNo: "কম্পিউটার পেরিফেরালস, কম্পিউটারের অঙ্গসংগঠন, সিস্টেমস ও ডেটাবেইস । (১০ নম্বর)", mastery: 77, trend: "+9%" },
+      { name: "তথ্যপ্রযুক্তি (নেটওয়ার্ক ও যোগাযোগ)", bcsNo: "ই-কমার্স, সেলুলার ডাটা নেটওয়ার্ক, ইন্টারনেট ও দৈনন্দিন কম্পিউটিং প্রযুক্তি । (০৫ নম্বর)", mastery: 58, trend: "+3%" },
+      { name: "তথ্যপ্রযুক্তি (আধুনিক সেবা ও সাইবারক্রাইম)", bcsNo: "ক্লাউড কম্পিউটিং, সোশ্যাল নেটওয়ার্কিং, রোবটিক্স ও সাইবার অপরাধ । (০৫ নম্বর)", mastery: 71, trend: "+4%" }
     ]
   },
   {
     name: "৮. গাণিতিক যুক্তি",
-    marks: 20,
+    marks: 15,
     color: "from-fuchsia-500 to-pink-500",
     topics: [
-      { name: "বাস্তব সংখ্যা, লসাআগু ও লাভ-ক্ষতি", bcsNo: "সরল-যৌগিক মুনাফা, লাভ-ক্ষতি, অনুপাত ও শতকরা", mastery: 48, trend: "-6%" },
-      { name: "বীজগাণিতিক সূত্রাবলি ও অসমতা", bcsNo: "সূত্রাবলি, উৎপাদক, সমীকরণ, সরল ও দ্বিপদী অসমতা", mastery: 55, trend: "+8%" },
-      { name: "সূচক, লগারিদম ও প্রগতি ধারা", bcsNo: "লগারিদম, সমান্তর ও গুণোত্তর অনুক্রম ও ধারা", mastery: 60, trend: "+15%" },
-      { name: "জ্যামিতি, পরিমিতি ও উপপাদ্য", bcsNo: "পিথাগোরাসের উপপাদ্য, বৃত্ত ও গণবস্তুর ক্ষেত্রফল", mastery: 40, trend: "+0%" },
-      { name: "সেট, বিন্যাস, সমাবেশ ও সম্ভাব্যতা", bcsNo: "সেট তত্ত্ব, বিন্যাস-সমাবেশ, পরিসংখ্যান ও সম্ভাব্যতা", mastery: 35, trend: "-10%" }
+      { name: "১. পাটিগণিত", bcsNo: "বাস্তব সংখ্যা, ল.সা.গু, গ.সা.গু, শতকরা, সরল ও যৌগিক মুনাফা, অনুপাত ও সমানুপাত, লাভ ও ক্ষতি । (০৩ নম্বর)", mastery: 48, trend: "-6%" },
+      { name: "২. বীজগণিত", bcsNo: "বীজগাণিতিক সূত্রাবলি, বহুপদী উৎপাদক, সমীকরণ ও অসমতা, সহসমীকরণ । (০৩ নম্বর)", mastery: 55, trend: "+8%" },
+      { name: "৩. সূচক, লগারিদম ও ধারা", bcsNo: "সূচক ও লগারিদম, সমান্তর ও গুণোত্তর অনুক্রম ও ধারা । (০৩ নম্বর)", mastery: 60, trend: "+15%" },
+      { name: "৪. জ্যামিতি ও পিথাগোরাস", bcsNo: "রেখা, কোণ, ত্রিভুজ ও চতুর্ভুজ সংক্রান্ত উপপাদ্য, পিথাগোরাসের উপপাদ্য, বৃত্ত সংক্রান্ত উপপাদ্য, পরিমিতি । (০৩ নম্বর)", mastery: 40, trend: "+0%" },
+      { name: "৫. সেট, বিন্যাস ও সমাবেশ", bcsNo: "সেট, বিন্যাস ও সমাবেশ, পরিসংখ্যান ও সম্ভাব্যতা । (০৩ নম্বর)", mastery: 35, trend: "-10%" }
     ]
   },
   {
@@ -115,17 +133,22 @@ const bcsSyllabus = [
     marks: 15,
     color: "from-pink-500 to-rose-500",
     topics: [
-      { name: "যৌক্তিক বিচার ও সমস্যা সমাধান", bcsNo: "Verbal Reasoning, Problem Solving", mastery: 80, trend: "+2%" },
-      { name: "বানান, যান্ত্রিক ও সংখ্যাগত ক্ষমতা", bcsNo: "Mechanical, Space Relation, Numerical Ability", mastery: 68, trend: "-1%" }
+      { name: "১. ভাষাগত যৌক্তিক বিচার (Verbal)", bcsNo: "ভাষাগত যৌক্তিক বিচার (Verbal Reasoning)", mastery: 80, trend: "+2%" },
+      { name: "২. সমস্যা সমাধান (Problem Solving)", bcsNo: "সমস্যা সমাধান (Problem Solving)", mastery: 68, trend: "-1%" },
+      { name: "৩. বানান ও ভাষা (Spelling)", bcsNo: "বানান ও ভাষা (Spelling and Language)", mastery: 75, trend: "+5%" },
+      { name: "৪. যান্ত্রিক দক্ষতা (Mechanical)", bcsNo: "যান্ত্রিক দক্ষতা (Mechanical Reasoning)", mastery: 70, trend: "+3%" },
+      { name: "৫. স্থানাঙ্ক সম্পর্ক (Space Relation)", bcsNo: "স্থানাঙ্ক সম্পর্ক (Space Relation)", mastery: 62, trend: "+8%" },
+      { name: "৬. সংখ্যাগত ক্ষমতা (Numerical)", bcsNo: "সংখ্যাগত ক্ষমতা (Numerical Ability)", mastery: 72, trend: "+4%" }
     ]
   },
   {
     name: "১০. নৈতিকতা, মূল্যবোধ ও সু-শাসন",
-    marks: 15,
+    marks: 10,
     color: "from-rose-500 to-red-500",
     topics: [
-      { name: "মূল্যবোধ ও সুশাসনের ধারণা", bcsNo: "Definition, Relation, General Perception & Values", mastery: 90, trend: "+5%" },
-      { name: "সুশাসন প্রতিষ্ঠা ও জাতীয় প্রভাব", bcsNo: "Social establishment, National Development, Costs", mastery: 88, trend: "+0%" }
+      { name: "মূল্যবোধ ও সুশাসনের সংজ্ঞায়ন ও সম্পর্ক", bcsNo: "Definition of Values and Good Governance; Relation between Values and Good Governance; General Perception of Values and Good Governance", mastery: 90, trend: "+5%" },
+      { name: "মূল্যবোধের গুরুত্ব ও সুশাসন প্রতিষ্ঠা", bcsNo: "Importance of Values and Good Governance in the life of an individual as a citizen as well as in the making of society and national ideals; How the element of Good Governance and Values can be established in society", mastery: 88, trend: "+0%" },
+      { name: "জাতীয় উন্নয়ন ও অনুপস্থিতির মাশুল", bcsNo: "Impact of Values and Good Governance in national development; The benefit of Values and Good Governance and the cost society pays adversely in their absence", mastery: 83, trend: "+3%" }
     ]
   }
 ];
@@ -156,9 +179,12 @@ const bankSyllabus = [
     weight: 30,
     color: "from-amber-500 to-orange-500",
     topics: [
-      { name: "Arithmetic Numerical Abilities", match: "Simple & compound interest, percentage, profit-loss", mastery: 45, trend: "-5%" },
-      { name: "Algebraic & Word Problems", match: "Equations, ratio-proportion, work-time, speed-distance", mastery: 38, trend: "+10%" },
-      { name: "Geometry & Coordinate Maths", match: "Triangles, circles, lines and coordinate applications", mastery: 30, trend: "-2%" }
+      { name: "Arithmetic Numerical Abilities", match: "Simple & compound interest, percentage, profit-loss, average", mastery: 45, trend: "-5%" },
+      { name: "Algebraic & Word Problems", match: "Equations, ratio-proportion, work-time, speed-distance-trains, pipes", mastery: 38, trend: "+10%" },
+      { name: "Geometry & Coordinate Maths", match: "Triangles, circles, quadrilaterals, coordinate geometry & lines", mastery: 30, trend: "-2%" },
+      { name: "Data Interpretation (DI)", match: "Tables, pie charts, bar charts, line graphs and caselets", mastery: 52, trend: "+3%" },
+      { name: "Set Theory & Probability", match: "Venn diagram, sets, combinations, permutations and basic probability", mastery: 48, trend: "+4%" },
+      { name: "Mensuration & Numbers", match: "Area, volume, LCM, HCF, fractions, indices, log and number series", mastery: 55, trend: "+12%" }
     ]
   },
   {
@@ -166,8 +192,11 @@ const bankSyllabus = [
     weight: 15,
     color: "from-blue-600 to-sky-500",
     topics: [
-      { name: "Bangladesh Affairs (বাংলাদেশ বিষয়)", match: "History, Central Bank system, Currency, 5-year plans", mastery: 84, trend: "+2%" },
-      { name: "International Banking & Trade", match: "IMF, WB, global trade, geopolitics, current headlines", mastery: 60, trend: "+7%" }
+      { name: "Bangladesh Affairs (বাংলাদেশ বিষয়)", match: "History, Central Bank, Currency, 5-year plans & state structure", mastery: 84, trend: "+2%" },
+      { name: "International Banking & Trade", match: "IMF, WB, global trade, geopolitics, current headlines & agreements", mastery: 60, trend: "+7%" },
+      { name: "Monetary Policy & FinTech", match: "Regulator acts, green banking, monetary instruments and mobile banking", mastery: 72, trend: "+6%" },
+      { name: "Global Geopolitics & Organizations", match: "United Nations, treaties, regional groupings, summits and international awards", mastery: 63, trend: "+5%" },
+      { name: "Environmental Issues & Sports", match: "Climate change, global summits, sports events and international history", mastery: 77, trend: "+2%" }
     ]
   },
   {
@@ -175,11 +204,93 @@ const bankSyllabus = [
     weight: 10,
     color: "from-purple-600 to-indigo-500",
     topics: [
-      { name: "Computer Hardware & OS Architecture", match: "Memory, Peripherals, Registers, Processing speeds", mastery: 70, trend: "+4%" },
-      { name: "Banking Technology & Networking", match: "LAN, WAN, SWIFT, cyber security, digital economy", mastery: 82, trend: "+11%" }
+      { name: "Computer Hardware & OS Architecture", match: "Memory, Peripherals, Registers, Processing speeds, Bus structure", mastery: 70, trend: "+4%" },
+      { name: "Banking Technology & Networking", match: "LAN, WAN, SWIFT, cyber security & threat detection", mastery: 82, trend: "+11%" },
+      { name: "Database & Information Systems", match: "SQL querying, DBMS structures, computer languages and soft engineering", mastery: 64, trend: "+5%" },
+      { name: "Internet, Cyber Security & E-Commerce", match: "Email protocols, routing, firewalls, cyber crimes and secure transactions", mastery: 79, trend: "+8%" }
     ]
   }
 ];
+
+
+
+// Helper map to retrieve subtopics per topic
+function getSubtopicsForTopic(topicName: string): string[] {
+  const mapping: { [key: string]: string[] } = {
+    // Bangla
+    "প্রয়োগ-অপপ্রয়োগ, বানান ও বাক্য শুদ্ধি": ["বানান শুদ্ধি (Spellings)", "বাক্য শুদ্ধি (Syntax)", "প্রয়োগ-অপপ্রয়োগ (Usage)"],
+    "পরিভাষা, সমার্থক ও বিপরীতার্থক শব্দ": ["পরিভাষা (Terminology)", "সমার্থক শব্দ (Synonyms)", "বিপরীতার্থক শব্দ (Antonyms)"],
+    "ধ্বনি, বর্ণ ও শব্দ": ["ধ্বনি ও বর্ণ (Phonetics)", "শব্দের প্রকারভেদ", "ধ্বনি পরিবর্তন (Sound Change)"],
+    "পদ ও বাক্য": ["পদের শ্রেণিবিভাগ", "বাক্যের গঠন", "কারক ও বিভক্তি (Cases)"],
+    "প্রত্যয়, সন্ধি ও সমাস": ["সন্ধি (Sandhi)", "সমাস (Compound Words)", "প্রত্যয় (Prefix/Suffix)"],
+    "ক. প্রাচীন ও মধ্যযুগ (সাহিত্য)": ["চর্যাপদ (Charyapada)", "মঙ্গলকাব্য (Mangalkavya)", "বৈষ্ণব পদাবলি", "মোর্শিয়া সাহিত্য"],
+    "খ. আধুনিক যুগ (১৮০০-বর্তমান পর্যন্ত) (সাহিত্য)": ["রবীন্দ্র-নজরুল সাহিত্য", "ভাষা আন্দোলন ভিত্তিক সাহিত্য", "মুক্তিযুদ্ধ ভিত্তিক সাহিত্য", "সার্থক ইতিহাস ও উপন্যাস"],
+
+    // English
+    "A. Parts of Speech: Noun & Pronoun": ["Noun & Determiners", "Pronoun Classifications", "Gender & Number"],
+    "A. Parts of Speech: The Verb & Modals": ["Finite & Non-finite", "Linking & Phrasal Verbs", "Modals & Auxiliaries"],
+    "A. Parts of Speech: Adjective, Adverb, Preposition & Conjunction": ["Adjective Degrees", "Adverbs of Frequency", "Appropriate Prepositions"],
+    "B. Idioms & Phrases": ["Idiomatic Expressions", "Kinds of Phrases", "Verbal Phrases"],
+    "C. Clauses": ["Principal Clause", "Subordinate Noun Clause", "Adjective and Adverbial Clauses"],
+    "D. Corrections": ["Subject-Verb Agreement", "Tense Consistency", "Pronoun Reference Error"],
+    "E. Sentences & Transformations": ["Simple, Compound, Complex", "Active & Passive Voice", "Degree Transformations"],
+    "F. Words: Meanings, Synonyms & Antonyms": ["Synonyms & Contextual Meaning", "Antonyms", "Analogical Words"],
+    "F. Words: Spellings & Formations": ["Spelling Corrections", "Prefixes & Suffixes", "Inflections"],
+    "G. Composition": ["Letter Writing formats", "Paragraph Composition structures"],
+    "H. English Literature": ["Elizabethan Period", "Romantic Period", "Victorian & Modernist Writers", "Famous Quotations"],
+
+    // Bangladesh affairs
+    "১. বাংলাদেশের জাতীয় বিষয়াবলি": ["প্রাচীন বাংলার ইতিহাস", "ভাষা আন্দোলন ১৯৫২", "মুক্তিযুদ্ধ ১৯৭১ ও পটভূমি"],
+    "২. বাংলাদেশের কৃষিজ সম্পদ": ["শস্য বহুমুখীকরণ", "মৎস্য ও গবাদিপশু পালন", "বনজ ও খনিজ সম্পদ"],
+    "৩. বাংলাদেশের জনসংখ্যা, আদমশুমারি, জাতি, গোষ্ঠী ও উপজাতি": ["জনসংখ্যা কাঠামো", "আদমশুমারি ও গৃহগণনা", "উপজাতিদের ভৌগোলিক অবস্থান"],
+    "৪. বাংলাদেশের অর্থনীতি": ["পঞ্চবার্ষিকী পরিকল্পনা", "জাতীয় বাজেট ও জিডিপি", "দারিদ্র্য বিমোচন ও রেমিট্যান্স"],
+    "৫. বাংলাদেশের শিল্প ও বাণিজ্য": ["পোশাক খাত (RMG)", "আমদানি ও রপ্তানি পণ্য", "ব্যাংক ও বীমা সেক্টর"],
+    "৬. বাংলাদেশের সংবিধান": ["প্রস্তাবনা ও মূলনীতি", "মৌলিক অধিকারসমূহ", "গুরুত্বপূর্ণ সংবিধান সংশোধনী"],
+    "৭. বাংলাদেশের রাজনৈতিক ব্যবস্থা": ["রাজনৈতিক দলের ভূমিকা", "সুশীল সমাজ ও চাপ সৃষ্টিকারী দল"],
+    "৮. বাংলাদেশের সরকার ব্যবস্থা": ["আইন, শাসন ও বিচার বিভাগ", "জাতীয় ও স্থানীয় প্রশাসনিক কাঠামো"],
+    "৯. বাংলাদেশের জাতীয় অর্জন, বিশিষ্ট ব্যক্তিত্ব ও গুরুত্বপূর্ণ প্রতিষ্ঠান": ["জাতীয় অর্জন ও দিবস", "বিশিষ্ট ব্যক্তিত্ব", "খেলাধুলা ও ল্যান্ডমার্ক"],
+
+    // International affairs
+    "১. বৈশ্বিক ইতিহাস, আঞ্চলিক ও আন্তর্জাতিক ব্যবস্থা, ভূ-রাজনীতি": ["বৈশ্বিক ইতিহাস ও যুদ্ধ", "আঞ্চলিক ফোরাম", "ভূ-রাজনীতি ও সমীকরণ"],
+    "২. আন্তর্জাতিক নিরাপত্তা ও আন্তরাষ্ট্রীয় ক্ষমতা সম্পর্ক": ["আন্তরাষ্ট্রীয় চুক্তি ও নিরাপত্তা", "সামরিক জোট ও সক্ষমতা"],
+    "৩. বিশ্বের সাম্প্রতিক ও চলমান ঘটনাপ্রবাহ": ["চলমান বৈশ্বিক সংঘাত", "সাম্প্রতিক ভূ-রাজনৈতিক সম্মেলন"],
+    "৪. আন্তর্জাতিক পরিবেশগত ইস্যু ও কূটনীতি": ["COP ও পরিবেশ চুক্তি", "গ্রিনহাউস গ্যাস ও তাপমাত্রা"],
+    "৫. আন্তর্জাতিক সংগঠনসমূহ এবং বৈশ্বিক অর্থনৈতিক প্রতিষ্ঠানাদি": ["জাতিসংঘ ও সাব-সংস্থা (UN)", "বিশ্বব্যাংক ও আইএমএফ (WB/IMF)", "ডব্লিউটিও (WTO)"],
+
+    // Science
+    "ভৌত বিজ্ঞান": ["পদার্থের অবস্থা ও এটম", "কার্বন ও পলিমার", "এসিড, ক্ষার ও লবণ"],
+    "জীব বিজ্ঞান": ["উদ্ভিদ ও প্রাণী টিস্যু", "জেনেটিক্স ও ডিএনএ", "জীববৈচিত্র্য ও ভাইরাস"],
+    "আধুনিক বিজ্ঞান": ["পৃথিবী ও মহাবিশ্ব সৃষ্টি", "ব্লাক হোল ও কসমিক রে", "হিগস বোসন কণা"],
+
+    // ICT
+    "কম্পিউটার (অঙ্গসংগঠন ও পেরিফেরালস)": ["কম্পিউটার হার্ডওয়্যার", "মেমোরি ও বাস কাঠামো", "সিস্টেম ও ডাটাবেজ"],
+    "তথ্যপ্রযুক্তি (নেটওয়ার্ক ও যোগাযোগ)": ["LAN/WAN নেটওয়ার্ক প্রটোকল", "মোবাইল ডাটা প্রযুক্তি", "ই-কমার্সের ভিত্তি"],
+    "তথ্যপ্রযুক্তি (আধুনিক সেবা ও সাইবারক্রাইম)": ["ক্লাউড কম্পিউটিং", "রোবটিক্স ও এআই", "সাইবার ক্রাইম ও সিকিউরিটি"],
+
+    // Math
+    "১. পাটিগণিত": ["বাস্তব সংখ্যা, লসাগু-গসাগু", "শতকরা ও লাভ-ক্ষতি", "সরল ও যৌগিক মুনাফা"],
+    "২. বীজগণিত": ["বীজগাণিতিক সূত্রাবলি", "বহুপদী উৎপাদক", "সমীকরণ ও অসমতা"],
+    "৩. সূচক, লগারিদম ও ধারা": ["সূচক ও লগারিদম", "সমান্তর ও গুণোত্তর ধারা"],
+    "৪. জ্যামিতি ও পিথাগোরাস": ["কোণ ও ত্রিভুজ সংক্রান্ত", "পিথাগোরাসের উপপাদ্য", "ক্ষেত্রফল ও পরিমিতি"],
+    "৫. সেট, বিন্যাস ও সমাবেশ": ["সেট ও ভেনচিত্র", "বিন্যাস ও সমাবেশ", "পরিসংখ্যান ও সম্ভাব্যতা"],
+
+    // Mental
+    "১. মানসিক দক্ষতা": ["মানসিক ক্ষমতা গাণিতিক ধাঁধা"],
+    "১. ভাষাগত যৌক্তিক বিচার (Verbal)": ["ভাষাগত যৌক্তিক কোডিং", "রক্তের সম্পর্কীয় সমস্যা"],
+    "২. সমস্যা সমাধান (Problem Solving)": ["সমস্যা সমাধান সমাধান", "দিক ও দূরত্ব সমস্যা"],
+    "৩. বানান ও ভাষা (Spelling)": ["বানান শুদ্ধি যাচাই", "ভাষাগত সামঞ্জস্যপূর্ণ জোড়"],
+    "৪. যান্ত্রিক দক্ষতা (Mechanical)": ["যান্ত্রিক পার্টস ও গিয়ার", "পদার্থের সাধারণ যান্ত্রিক নিয়ম"],
+    "৫. স্থানাঙ্ক সম্পর্ক (Space Relation)": ["স্থানাঙ্ক জ্যামিতি বেসিক", "আয়নায় প্রতিবিম্ব প্রতিচ্ছবি"],
+    "৬. সংখ্যাগত ক্ষমতা (Numerical)": ["সিরিজ ও ধারা পূরণ", "সংখ্যার গণনামূলক ধাঁধা"],
+
+    // Ethics
+    "মূল্যবোধ ও সুশাসনের সংজ্ঞায়ন ও সম্পর্ক": ["মূল্যবোধ ও সুশাসন সংজ্ঞা", "মূল্যবোধের উপাদান"],
+    "মূল্যবোধের গুরুত্ব ও সুশাসন প্রতিষ্ঠা": ["নাগরিক মূল্যবোধ", "সুশাসনের স্তম্ভসমূহ প্রতিষ্ঠা"],
+    "জাতীয় উন্নয়ন ও অনুপস্থিতির মাশুল": ["জাতীয় উন্নয়নে সুশাসন প্রভাব", "দুর্নীতি ও অব্যবস্থাপনার মূল্য"]
+  };
+  
+  return mapping[topicName] || ["সাধারণ প্রশ্ন (General Concepts)", "ব্যাখ্যাসূত্র বিশ্লেষণ (Analytical Concepts)"];
+}
 
 export default function ExamEngine({ examType, selectedExamMode, onExamCompleted, onTriggerTutor }: ExamEngineProps) {
   
@@ -201,10 +312,19 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
     }
   });
 
+  const [pdfLayoutMode, setPdfLayoutMode] = useState<'single' | 'double' | 'concise'>('double');
+  const [includeAnswersInPdf, setIncludeAnswersInPdf] = useState<boolean>(true);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [googleAccessToken, setGoogleAccessToken] = useState<string | null>(null);
   const [isExportingGd, setIsExportingGd] = useState<boolean>(false);
   const [exportMessage, setExportMessage] = useState<string>('');
+  const [confirmationExport, setConfirmationExport] = useState<{
+    fileName: string;
+    type: 'PDF' | 'GDrive';
+    status: 'success' | 'creating' | 'error';
+    linkUrl?: string;
+    errorMsg?: string;
+  } | null>(null);
 
   useEffect(() => {
     try {
@@ -243,7 +363,14 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
     setExamHistory(prev => [newHistoryItem, ...prev]);
   };
 
-  const handlePrintExam = (questionsToExport: Question[], baseTitle: string, includeAnswers: boolean) => {
+  const handlePrintExam = (questionsToExport: Question[], baseTitle: string, includeAnswers: boolean, layout: 'single' | 'double' | 'concise' = pdfLayoutMode) => {
+    // Show confirmation toast/modal with generated filename
+    setConfirmationExport({
+      fileName: `${baseTitle}.pdf`,
+      type: 'PDF',
+      status: 'success'
+    });
+
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
       alert("পপ-আপ সক্ষম করুন (Enable pop-ups to export as PDF)");
@@ -254,18 +381,22 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
 
     let optionsHTML = '';
     questionsToExport.forEach((q, idx) => {
+      let optionsDivStyle = '';
+      if (layout === 'concise') {
+        optionsDivStyle = `display: flex; flex-flow: row wrap; gap: 4px 12px; margin-left: 10px; margin-top: 2px;`;
+      } else {
+        optionsDivStyle = `display: grid; grid-template-columns: ${layout === 'double' ? '1fr' : '1fr 1fr'}; gap: ${layout === 'double' ? '5px' : '10px'}; margin-left: 12px;`;
+      }
+
       optionsHTML += `
-        <div style="margin-bottom: 24px; break-inside: avoid; page-break-inside: avoid;">
-          <p style="font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #1e293b; text-align: left;">
+        <div class="question-block" style="margin-bottom: ${layout === 'concise' ? '6px' : layout === 'double' ? '14px' : '22px'}; break-inside: avoid; page-break-inside: avoid;">
+          <p style="font-size: ${layout === 'concise' ? '10.5px' : layout === 'double' ? '12px' : '14px'}; font-weight: bold; margin-bottom: 4px; color: #1e293b; text-align: left; line-height: ${layout === 'concise' ? '1.25' : '1.4'};">
             ${idx + 1}. ${q.text}
-            <span style="font-size: 10px; font-weight: normal; font-family: monospace; color: #64748b; margin-left: 8px;">
-              [${q.subject} • ${q.difficulty}]
-            </span>
           </p>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-left: 15px;">
+          <div style="${optionsDivStyle}">
             ${q.options.map((opt, oIdx) => `
-              <div style="font-size: 12px; color: #334155; display: flex; align-items: center; gap: 6px; text-align: left;">
-                <span style="font-weight: bold; font-family: monospace; border: 1px solid #cbd5e1; border-radius: 4px; padding: 1px 5px; background: #f1f5f9; display: inline-block; min-width: 14px; text-align: center;">
+              <div style="font-size: ${layout === 'concise' ? '9.5px' : layout === 'double' ? '11px' : '12px'}; color: #334155; display: flex; align-items: center; gap: 4px; text-align: left;">
+                <span style="font-weight: bold; font-family: monospace; border: 1px solid #cbd5e1; border-radius: 3px; padding: 0px 3px; background: #f1f5f9; display: inline-block; min-width: 12px; text-align: center; font-size: ${layout === 'concise' ? '8.5px' : '10px'};">
                   ${String.fromCharCode(65 + oIdx)}
                 </span>
                 <span>${opt}</span>
@@ -278,35 +409,55 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
 
     let answersHTML = '';
     if (includeAnswers) {
-      answersHTML = `
-        <div style="margin-top: 40px; border-top: 2px dashed #94a3b8; padding-top: 20px; break-inside: avoid; page-break-inside: avoid;">
-          <h3 style="font-size: 16px; font-weight: bold; color: #0f172a; margin-bottom: 12px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">
-            ANSWER KEY & EXPLANATIONS (উত্তরমালা ও সমাধান সূত্র)
-          </h3>
-          <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; text-align: left;">
-            <thead>
-              <tr style="background-color: #f1f5f9;">
-                <th style="padding: 6px 12px; border: 1px solid #e2e8f0; font-size: 11px;">Q.No</th>
-                <th style="padding: 6px 12px; border: 1px solid #e2e8f0; font-size: 11px;">Correct Key</th>
-                <th style="padding: 6px 12px; border: 1px solid #e2e8f0; font-size: 11px;">Explanation / সূত্র</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${questionsToExport.map((q, idx) => `
-                <tr>
-                  <td style="padding: 6px 12px; border: 1px solid #e2e8f0; font-weight: bold; font-family: monospace; font-size: 11px; width: 50px;">${idx + 1}</td>
-                  <td style="padding: 6px 12px; border: 1px solid #e2e8f0; font-weight: bold; color: #15803d; font-size: 11px; width: 120px;">
-                    Option ${String.fromCharCode(65 + q.correctIndex)}: ${q.options[q.correctIndex]}
-                  </td>
-                  <td style="padding: 6px 12px; border: 1px solid #e2e8f0; font-size: 11px; color: #475569;">
-                    ${q.explanations?.bn || 'সমাধান সূত্র লোড করা আছে।'}
-                  </td>
+      if (layout === 'concise') {
+        const answerGridItems = questionsToExport.map((q, idx) => `
+          <div style="border: 1px solid #e2e8f0; padding: 3px 5px; font-size: 9px; background: #f8fafc; text-align: left; display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-weight: bold; font-family: monospace; color: #475569;">Q${idx + 1}:</span>
+            <span style="font-weight: bold; color: #16a34a;">${String.fromCharCode(65 + q.correctIndex)}</span>
+          </div>
+        `).join('');
+
+        answersHTML = `
+          <div style="margin-top: 15px; border-top: 2px dashed #cbd5e1; padding-top: 10px; break-inside: avoid; page-break-inside: avoid;">
+            <h3 style="font-size: 11px; font-weight: bold; color: #0f172a; margin-bottom: 6px; text-align: center; text-transform: uppercase; letter-spacing: 0.5px;">
+              ANSWER MATRIX (উত্তরপত্র সংক্ষেপ)
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 3px;">
+              ${answerGridItems}
+            </div>
+          </div>
+        `;
+      } else {
+        answersHTML = `
+          <div style="margin-top: 30px; border-top: 2px dashed #94a3b8; padding-top: 15px; break-inside: avoid; page-break-inside: avoid;">
+            <h3 style="font-size: 14px; font-weight: bold; color: #0f172a; margin-bottom: 10px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">
+              ANSWER KEY & EXPLANATIONS (উত্তরমালা ও সমাধান সূত্র)
+            </h3>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; text-align: left;">
+              <thead>
+                <tr style="background-color: #f1f5f9;">
+                  <th style="padding: 5px 8px; border: 1px solid #e2e8f0; font-size: 10px; width: 40px;">Q.No</th>
+                  <th style="padding: 5px 8px; border: 1px solid #e2e8f0; font-size: 10px; width: 140px;">Correct Key</th>
+                  <th style="padding: 5px 8px; border: 1px solid #e2e8f0; font-size: 10px;">Explanation / সূত্র</th>
                 </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      `;
+              </thead>
+              <tbody>
+                ${questionsToExport.map((q, idx) => `
+                  <tr>
+                    <td style="padding: 4px 8px; border: 1px solid #e2e8f0; font-weight: bold; font-family: monospace; font-size: 10px;">${idx + 1}</td>
+                    <td style="padding: 4px 8px; border: 1px solid #e2e8f0; font-weight: bold; color: #15803d; font-size: 10px;">
+                      Option ${String.fromCharCode(65 + q.correctIndex)}: ${q.options[q.correctIndex]}
+                    </td>
+                    <td style="padding: 4px 8px; border: 1px solid #e2e8f0; font-size: 10px; color: #475569;">
+                      ${q.explanations?.bn || 'সমাধান সূত্র লোড করা আছে।'}
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
     }
 
     const completeHTML = `
@@ -320,8 +471,8 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
           body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             color: #1e293b;
-            padding: 40px;
-            line-height: 1.5;
+            padding: ${layout === 'concise' ? '12px' : layout === 'double' ? '20px' : '40px'};
+            line-height: ${layout === 'concise' ? '1.25' : '1.4'};
             margin: 0;
             background: white;
           }
@@ -329,43 +480,55 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
             body { padding: 0; }
             .no-print { display: none !important; }
           }
+          
+          /* Column styling */
+          .questions-container {
+            display: block;
+          }
+          .layout-double-columns {
+            column-count: 2;
+            column-gap: ${layout === 'concise' ? '16px' : '30px'};
+            column-rule: 1px dashed #cbd5e1;
+          }
         </style>
       </head>
       <body>
-        <div class="no-print" style="background: #0f172a; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; margin-bottom: 30px; font-family: sans-serif;">
-          <span style="font-size: 13px; font-weight: bold;">🖨️ PDF Print Preview (Save as PDF to practice offline | বাংলায় অফলাইন প্রস্তুতি)</span>
+        <div class="no-print" style="background: #0f172a; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; margin-bottom: 20px; font-family: sans-serif;">
+          <span style="font-size: 13px; font-weight: bold;">
+            🖨️ PDF Print Preview (${layout === 'concise' ? '⚡ Concise Ultra-Compact Column Layout' : layout === 'double' ? 'Double Column Paper-Saving Mode 📄📄' : 'Standard Single Column Layout 📃'})
+          </span>
           <button onclick="window.print()" style="background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer;">
             Print / Save as PDF
           </button>
         </div>
 
-        <div style="border-bottom: 3px double #334155; padding-bottom: 12px; margin-bottom: 24px; text-align: center;">
-          <h1 style="font-size: 20px; font-weight: bold; margin: 0 0 4px 0; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px;">
+        <div style="border-bottom: 3px double #334155; padding-bottom: 10px; margin-bottom: 18px; text-align: center;">
+          <h1 style="font-size: ${layout === 'concise' ? '15px' : layout === 'double' ? '18px' : '22px'}; font-weight: bold; margin: 0 0 4px 0; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px;">
             ${baseTitle}
           </h1>
-          <p style="font-size: 10px; color: #64748b; font-family: monospace; margin: 0 0 5px 0;">
-            RANKFLOW AI SYSTEM • BANGLADESH COMPETITIVE EXAMS CORE MODEL
+          <p style="font-size: 9px; color: #64748b; font-family: monospace; margin: 0 0 5px 0;">
+            RANKFLOW AI SYSTEM • HIGH-EFFICIENCY COMPACT EXAM FORMAT
           </p>
-          <div style="display: flex; justify-content: space-between; font-size: 11px; color: #475569; margin-top: 10px;">
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: #475569; margin-top: 8px;">
             <span>তারিখ: <strong>${bnDateStr}</strong></span>
             <span>প্রশ্নের সংখ্যা: <strong>${questionsToExport.length} টি</strong></span>
             <span>সময়: <strong>${Math.ceil((questionsToExport.length * 40) / 60)} মিনিট</strong></span>
           </div>
         </div>
 
-        <div style="margin-bottom: 12px; font-size: 11px; font-style: italic; color: #64748b; line-height: 1.4; text-align: left;">
+        <div style="margin-bottom: 10px; font-size: 10px; font-style: italic; color: #64748b; line-height: 1.3; text-align: left;">
           * নির্দেশাবলি: প্রতিটি প্রশ্নের জন্য সঠিক উত্তরের বৃত্ত ভরাট করুন। ভুল উত্তরের জন্য ০.৫০ নেতিবাচক মার্কিং প্রযোজ্য। অফলাইন অনুশীলন শেষে সমাধান শিট দিয়ে নিজেকে মূল্যায়ন করুন।
         </div>
 
-        <hr style="border: 0; border-top: 1px solid #cbd5e1; margin-bottom: 24px;" />
+        <hr style="border: 0; border-top: 1px solid #cbd5e1; margin-bottom: 15px;" />
 
-        <div>
+        <div class="${(layout === 'double' || layout === 'concise') ? 'layout-double-columns' : 'questions-container'}">
           ${optionsHTML}
         </div>
 
         ${answersHTML}
 
-        <div style="margin-top: 30px; border-top: 1px solid #cbd5e1; padding-top: 14px; text-align: center; font-size: 9px; color: #94a3b8; font-family: monospace;">
+        <div style="margin-top: 20px; border-top: 1px solid #cbd5e1; padding-top: 10px; text-align: center; font-size: 8px; color: #94a3b8; font-family: monospace;">
           Generated by RankFlow AI Educational Platform • Prep intelligently, measure accurately.
         </div>
 
@@ -403,6 +566,12 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
 
   const handleExportGoogleDocs = async (questionsToExport: Question[], baseTitle: string) => {
     setIsExportingGd(true);
+    const fileName = `${baseTitle} - RankFlow AI Offline Exam.txt`;
+    setConfirmationExport({
+      fileName,
+      type: 'GDrive',
+      status: 'creating'
+    });
     setExportMessage('সার্ভারের সাথে ডাটা সিঙ্ক করা হচ্ছে...');
     try {
       const token = await getGoogleToken();
@@ -435,7 +604,7 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
       bodyText += `\n\nGenerated with RankFlow AI. Prep intelligently, measure accurately.`;
 
       const docMetadata = {
-        name: `${baseTitle} - RankFlow AI Offline Exam.txt`,
+        name: fileName,
         mimeType: 'text/plain'
       };
 
@@ -465,10 +634,27 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
         throw new Error('গুগল ড্রাইভ কানেক্টিভিটি ত্রুটি।');
       }
 
+      const driveData = await response.json();
+      const fileId = driveData.id;
+      const fileUrl = fileId ? `https://drive.google.com/open?id=${fileId}` : undefined;
+
+      setConfirmationExport({
+        fileName,
+        type: 'GDrive',
+        status: 'success',
+        linkUrl: fileUrl
+      });
+
       setExportMessage('সাফল্য! গুগল ড্রাইভে ফাইল সঠিকভাবে তৈরি হয়েছে।');
       setTimeout(() => setExportMessage(''), 4000);
     } catch (err: any) {
       console.error('Google Docs export failed:', err);
+      setConfirmationExport({
+        fileName,
+        type: 'GDrive',
+        status: 'error',
+        errorMsg: err.message || 'রপ্তানি করতে সমস্যা হয়েছে।'
+      });
       setExportMessage(`ত্রুটি: ${err.message || 'রপ্তানি করতে সমস্যা হয়েছে।'}`);
       setTimeout(() => setExportMessage(''), 5000);
     } finally {
@@ -491,9 +677,13 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [subjectCounts, setSubjectCounts] = useState<{ [subjName: string]: number }>({});
   const [topicCounts, setTopicCounts] = useState<{ [subjTopicKey: string]: number }>({});
+  const [selectedSubtopics, setSelectedSubtopics] = useState<string[]>([]);
+  const [selectedQuestionType, setSelectedQuestionType] = useState<string>('All');
+  const [selectedExamModeSetting, setSelectedExamModeSetting] = useState<string>('Practice');
   const [expandedSubjects, setExpandedSubjects] = useState<string[]>([]);
   const [isCompiling, setIsCompiling] = useState<boolean>(false);
   const [compilingError, setCompilingError] = useState<string>('');
+  const [isFallbackActive, setIsFallbackActive] = useState<boolean>(false);
   const [isCustomScrollMode, setIsCustomScrollMode] = useState<boolean>(false);
   const [eliminatedOptionsScroll, setEliminatedOptionsScroll] = useState<{ [qId: string]: number[] }>({});
   
@@ -919,6 +1109,34 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
     } else {
       // Dynamic AI question pull or complete
       setLoadingAdaptiveQ(true);
+      
+      // Calculate running performance accuracy for adaptive difficulty scaling
+      let correctAnswers = 0;
+      let totalAnswered = 0;
+      const updatedAnswers = {
+        ...answersSheet,
+        [currentQ.id]: { answeredIndex: selectedAnswer, isCertain }
+      };
+      
+      questions.forEach((q) => {
+        const record = updatedAnswers[q.id];
+        if (record) {
+          totalAnswered++;
+          if (record.answeredIndex === q.correctIndex) {
+            correctAnswers++;
+          }
+        }
+      });
+      
+      const sessionAccuracy = totalAnswered > 0 ? (correctAnswers / totalAnswered) : 0.5;
+      let dynamicAdaptiveDifficulty: 'Easy' | 'Medium' | 'Hard' = 'Medium';
+      
+      if (sessionAccuracy >= 0.70) {
+        dynamicAdaptiveDifficulty = 'Hard';
+      } else if (sessionAccuracy < 0.40) {
+        dynamicAdaptiveDifficulty = 'Easy';
+      }
+      
       try {
         const response = await fetch("/api/ai/adaptive-question", {
           method: "POST",
@@ -927,7 +1145,7 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
             subject: currentQ.subject,
             topic: currentQ.topic,
             examType: currentMode.type,
-            difficulty: currentMode.type === 'Bank' && currentMode.role?.includes('AD') ? 'Hard' : 'Medium'
+            difficulty: dynamicAdaptiveDifficulty
           })
         });
         if (response.ok) {
@@ -1151,7 +1369,10 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
         body: JSON.stringify({
           examType: currentMode.type,
           difficulty: customDifficulty,
-          allocations: allocations
+          allocations: allocations,
+          subtopics: selectedSubtopics,
+          questionType: selectedQuestionType,
+          examMode: selectedExamModeSetting
         })
       });
       
@@ -1162,6 +1383,7 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
       const data = await response.json();
       if (data && data.questions && data.questions.length > 0) {
         setQuestions(data.questions);
+        setIsFallbackActive(!!data.isFallback);
         recordSessionInHistory(data.questions, customDifficulty, selectedSubjects);
         setCurrentIdx(0);
         setSelectedAnswer(null);
@@ -1220,10 +1442,87 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
     <div className={`space-y-6 ${focusMode ? 'max-w-3xl mx-auto' : ''} text-slate-100`}>
       
       {/* Toast Notification for Google Drive/PDF Export */}
-      {exportMessage && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-slate-900 border border-indigo-500/30 text-indigo-250 text-indigo-100 text-xs font-semibold shadow-2xl flex items-center gap-3 animate-fadeIn">
+      {exportMessage && !confirmationExport && (
+        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-slate-900 border border-indigo-500/30 text-indigo-100 text-xs font-semibold shadow-2xl flex items-center gap-3 animate-fadeIn">
           <Sparkles className="w-5 h-5 text-indigo-400 animate-pulse" />
           <span>{exportMessage}</span>
+        </div>
+      )}
+
+      {/* Visual Export Status Tracker Toast */}
+      {confirmationExport && (
+        <div className="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-slate-900/95 border border-slate-800 rounded-2xl shadow-2xl p-4 space-y-3 animate-fadeIn backdrop-blur text-left">
+          <div className="flex justify-between items-start">
+            <div className="flex items-center gap-2">
+              <span className={`p-1.5 rounded-lg ${
+                confirmationExport.status === 'success' 
+                  ? 'bg-emerald-950 border border-emerald-500/30 text-emerald-400' 
+                  : confirmationExport.status === 'error'
+                    ? 'bg-rose-950 border border-rose-500/30 text-rose-450'
+                    : 'bg-purple-950 border border-purple-500/30 text-purple-400'
+              }`}>
+                {confirmationExport.status === 'success' ? (
+                  <CheckCircle2 className="w-4 h-4" />
+                ) : confirmationExport.status === 'error' ? (
+                  <AlertTriangle className="w-4 h-4" />
+                ) : (
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                )}
+              </span>
+              <div>
+                <h4 className="text-xs font-bold text-slate-200">
+                  {confirmationExport.type === 'PDF' ? 'PDF Export Generated' : 'Google Drive Core Synced'}
+                </h4>
+                <span className="text-[10px] text-slate-500 font-mono">
+                  {confirmationExport.status === 'success' ? 'Ready to use' : confirmationExport.status === 'error' ? 'Failed' : 'Uploading...'}
+                </span>
+              </div>
+            </div>
+            <button 
+              onClick={() => setConfirmationExport(null)}
+              className="text-slate-500 hover:text-slate-350 transition-colors text-xs font-bold font-sans cursor-pointer p-0.5"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="bg-slate-950/80 p-3 rounded-xl border border-slate-850 flex items-center gap-2.5">
+            <FileText className="w-4.5 h-4.5 text-slate-400 flex-shrink-0" />
+            <div className="min-w-0 flex-1">
+              <span className="text-[11px] font-bold text-slate-300 block truncate" title={confirmationExport.fileName}>
+                {confirmationExport.fileName}
+              </span>
+              <span className="text-[9px] font-mono text-slate-500 block uppercase">
+                Format: {confirmationExport.type === 'PDF' ? 'document (.pdf)' : 'text sheet (.txt)'}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex gap-2 pt-1">
+            {confirmationExport.linkUrl ? (
+              <a 
+                href={confirmationExport.linkUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex-1 py-2 px-3 bg-gradient-to-r from-purple-400 to-indigo-500 hover:from-purple-550 hover:to-indigo-550 text-slate-950 text-[10.5px] font-black rounded-xl text-center flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+              >
+                <ExternalLink className="w-3.5 h-3.5" /> View in Google Drive
+              </a>
+            ) : confirmationExport.type === 'PDF' ? (
+              <button
+                onClick={() => {
+                  alert("অনুগ্রহ করে আপনার ব্রাউজারের প্রিন্ট ডায়ালগ অথবা লোকাল ডাউনলোড ফোল্ডার চেক করুন।");
+                }}
+                className="flex-1 py-1.5 px-3 bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-slate-650 text-slate-300 text-[10.5px] font-bold rounded-xl text-center flex items-center justify-center gap-1.5 transition-all cursor-pointer animate-none"
+              >
+                <FileDown className="w-3.5 h-3.5" /> Close Print Dialog
+              </button>
+            ) : (
+              <div className="text-[10px] text-slate-500 italic">
+                {confirmationExport.status === 'creating' ? 'Syncing securely with Google Workspace Node...' : confirmationExport.errorMsg || 'Process halted.'}
+              </div>
+            )}
+          </div>
         </div>
       )}
       
@@ -1313,7 +1612,219 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
           
           {/* AI Advisor Card top */}
           <div className="p-4 bg-slate-950/80 rounded-2xl border border-slate-800 flex items-start gap-3.5">
-            <div cla      {/* 3. AI CUSTOM EXAM BUILDER */}
+            <div className={`p-2 bg-gradient-to-tr ${config.primaryTheme} rounded-xl shadow-md flex-shrink-0`}>
+              <Sparkles className="w-4 h-4 text-slate-250 animate-pulse" />
+            </div>
+            <div className="space-y-1 text-left">
+              <span className="text-[9px] font-mono uppercase tracking-widest text-slate-500 block font-bold">🤖 AI Syllabus Advisor</span>
+              <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                {currentMode.type === 'BCS' 
+                  ? 'আপনার সিলেবাস অনুযায়ী বাংলা সাহিত্য এবং আন্তর্জাতিক বিষয়াবলি থেকে সর্বাধিক হাই-ইয়েল্ডিং প্রশ্ন আসে। নিচে দেওয়া যেকোনো টপিকে ক্লিক করে সরাসরি প্র্যাকটিস সেট অথবা আপনার AI টিউটরের সংক্ষেপ ব্যাখ্যা বিশ্লেষণ শুরু করতে পারেন।' 
+                  : `বাংলাদেশ ব্যাংক সিলেবাস অনুযায়ী গাণিতিক যুক্তি (Quantitative Aptitude) এবং ইংরেজি ব্যাকরণ অংশের প্রশ্ন বেশি জটিল হয়ে থাকে। AD পদের জন্য ম্যাথ অংশটি হার্ড বেঞ্চমার্কে সেট থাকবে।`}
+              </p>
+            </div>
+          </div>
+
+          {/* Search bar inside syllabus */}
+          <div className="relative text-left">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
+              <Search className="w-4 h-4" />
+            </span>
+            <input 
+              type="text"
+              placeholder="সিলেবাসের বিষয় বা টপিক খুঁজুন (যেমন: সমাস, Parts of Speech, সাধারণ বিজ্ঞান)..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:border-cyan-400 outline-none transition-colors placeholder:text-slate-600 font-sans text-white text-left"
+            />
+          </div>
+
+          {/* Interactive tree of syllabus subjects */}
+          <div className="grid grid-cols-1 gap-3 font-sans text-left">
+            {filteredSyllabus.map((domain, domainIdx) => {
+              const isExpanded = expandedSubjectIndex === domainIdx;
+              return (
+                <div 
+                  key={domainIdx} 
+                  className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden transition-all duration-200 text-left"
+                >
+                  <button
+                    onClick={() => setExpandedSubjectIndex(isExpanded ? null : domainIdx)}
+                    className="w-full p-4 flex items-center justify-between text-left hover:bg-slate-850/40 transition-colors cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${domain.color}`} />
+                      <div className="space-y-0.5">
+                        <span className="text-xs font-bold text-slate-205 text-slate-200">{domain.name}</span>
+                        <span className="text-[10px] text-slate-500 block font-mono">
+                          {currentMode.type === 'BCS' ? `পূর্ণমান: ${(domain as any).marks}` : `মান বণ্টন: ${(domain as any).weight}%`}
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${isExpanded ? 'transform rotate-180' : ''}`} />
+                  </button>
+
+                  {isExpanded && (
+                    <div className="border-t border-slate-850 p-4 space-y-3 bg-slate-950/20 text-left">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                        {domain.topics.map((t, idx) => (
+                          <div 
+                            key={idx} 
+                            className="bg-slate-950/80 border border-slate-850 p-3.5 rounded-xl space-y-2 flex flex-col justify-between"
+                          >
+                            <div>
+                              <div className="flex justify-between items-start">
+                                <span className="text-xs font-bold text-slate-200">{t.name}</span>
+                                <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
+                                  t.mastery > 70 
+                                    ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-950/20' 
+                                    : 'bg-yellow-950/40 text-yellow-500 border border-yellow-900/20'
+                                }`}>
+                                  {t.mastery}%
+                                </span>
+                              </div>
+                              <span className="text-[10px] text-slate-500 block leading-relaxed font-mono capitalize">
+                                {t.bcsNo || (t as any).match}
+                              </span>
+                            </div>
+
+                            <div className="flex gap-2 pt-2 border-t border-slate-900">
+                              <button 
+                                onClick={() => handleStartNodePractice(domain.name, t.name)}
+                                className={`flex-1 py-1.5 px-2 bg-${config.accentColor}-400/10 hover:bg-${config.accentColor}-400 text-${config.accentColor}-400 hover:text-slate-950 duration-150 rounded text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1 cursor-pointer`}
+                              >
+                                <Play className="w-3 h-3" /> Practice (MCQ)
+                              </button>
+                              <button 
+                                onClick={() => onTriggerTutor(domain.name, t.name)}
+                                className="py-1.5 px-2.5 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 rounded text-[10px] font-semibold border border-slate-800 transition-all cursor-pointer"
+                              >
+                                Ask AI Tutor
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      )}
+
+      {/* 2. SYLLABUS MASTERY MAP HEATMAP */}
+      {activeTab === 'mastery' && (
+        <div className="space-y-5 animate-fadeIn text-left">
+          
+          <div className="p-5 bg-slate-900 rounded-2xl border border-slate-800 space-y-3 text-left">
+            <div className="flex justify-between items-center text-left font-sans">
+              <h3 className="text-xs font-mono uppercase tracking-widest text-slate-400 font-sans">Mastery Heatmap & National Placement Graph</h3>
+              <span className="text-[10px] text-slate-500 font-mono">Total {config.syllabus.length} Domains Loaded</span>
+            </div>
+            
+            <p className="text-xs text-slate-400 leading-relaxed font-sans mt-1">
+              এই বিষয়ভিত্তিক হিটম্যাপটি আপনার দক্ষতা নির্দেশ করে। সাবজেক্ট বা টপিক নোডে ক্লিক করুন এবং তাৎক্ষণিক AI প্র্যাকটিস অথবা লাইভ টেস্ট শুরু করুন।
+            </p>
+          </div>
+
+          {/* Interactive Grid Map representing connected syllabus nodes */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 font-sans text-left">
+            {config.syllabus.flatMap(d => d.topics.map(t => ({ 
+              subject: d.name, 
+              topicName: t.name, 
+              mastery: t.mastery, 
+              trend: t.trend, 
+              color: d.color 
+            }))).map((node, idx) => {
+              const isSelected = selectedMapNode?.topic === node.topicName;
+              return (
+                <div 
+                  key={idx}
+                  onClick={() => setSelectedMapNode({ subject: node.subject, topic: node.topicName, mastery: node.mastery })}
+                  className={`relative p-4 rounded-2xl border transition-all cursor-pointer hover:scale-[1.02] flex flex-col justify-between h-36 text-left ${
+                    isSelected 
+                      ? 'bg-slate-950/85 border-purple-500/50 ring-2 ring-purple-500/20' 
+                      : 'bg-slate-900 border-slate-800 hover:border-slate-705'
+                  }`}
+                >
+                  <div className="space-y-1">
+                    <span className="text-[9px] opacity-65 font-mono uppercase tracking-wider block truncate">{node.subject}</span>
+                    <h4 className="text-xs font-bold text-slate-202 text-slate-200 line-clamp-2">{node.topicName}</h4>
+                  </div>
+
+                  <div className="space-y-1.5 pt-2">
+                    {/* Glowing master state level bar */}
+                    <div className="w-full h-1 bg-slate-950 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-purple-400 to-indigo-500"
+                        style={{ width: `${node.mastery}%` }}
+                      />
+                    </div>
+
+                    <div className="flex justify-between items-center text-[10px] font-mono">
+                      <span className="text-slate-500">Mastery: <strong>{node.mastery}%</strong></span>
+                      <span className={`font-bold ${node.trend.startsWith('+') ? 'text-emerald-400' : 'text-rose-450'}`}>{node.trend}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Selected Node Details Side drawer detail card */}
+          {selectedMapNode && (
+            <div className="p-6 bg-slate-950/90 rounded-2xl border border-slate-800 space-y-4 animate-scaleUp font-sans text-left">
+              <div className="flex justify-between items-start">
+                <div className="space-y-1 text-left">
+                  <span className="text-[9px] text-slate-550 uppercase font-mono tracking-widest font-bold">Selected Mastery Area</span>
+                  <h4 className="text-sm font-extrabold text-white">{selectedMapNode.topic}</h4>
+                  <span className="text-xs text-slate-400 font-mono block">{selectedMapNode.subject}</span>
+                </div>
+                <button 
+                  onClick={() => setSelectedMapNode(null)}
+                  className="text-xs text-slate-500 hover:text-white cursor-pointer"
+                >
+                  ✕ Close
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans">
+                <div className="bg-slate-900/80 p-3.5 rounded-xl border border-slate-850 text-left">
+                  <span className="text-[9px] text-slate-550 uppercase font-bold block">Current Standing Index</span>
+                  <span className="text-lg font-mono font-bold block text-purple-400 mt-1">{selectedMapNode.mastery}% Mastery Score</span>
+                  <p className="text-[10.5px] text-slate-500 leading-normal mt-1.5 font-sans">You are in the 82nd percentile on this specific domain nationally compared to 12K active BPSC candidates.</p>
+                </div>
+
+                <div className="bg-slate-900/80 p-4 rounded-xl border border-slate-850 flex flex-col justify-between text-left">
+                  <span className="text-[9px] text-slate-550 uppercase font-bold block text-left font-sans">Actionable AI Assistance</span>
+                  <div className="flex gap-2 mt-2">
+                    <button 
+                      onClick={() => handleStartNodePractice(selectedMapNode.subject, selectedMapNode.topic)}
+                      className="flex-1 py-2 bg-purple-500 text-slate-950 font-bold rounded-lg text-[10px] uppercase cursor-pointer"
+                    >
+                      Adaptive Practice (১০টি MCQ)
+                    </button>
+                    <button 
+                      onClick={() => {
+                        onTriggerTutor(selectedMapNode.subject, selectedMapNode.topic);
+                      }}
+                      className="flex-1 py-1 px-2.5 bg-slate-800 hover:bg-slate-705 border border-slate-700 text-slate-350 rounded text-[10px] font-semibold transition-all cursor-pointer"
+                    >
+                      Bilingual Tutor Explanation
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+        </div>
+      )}
+
+      {/* 3. AI CUSTOM EXAM BUILDER */}
       {activeTab === 'builder' && (() => {
         const currentAllocations = getNormalizedAllocations(customLength, selectedSubjects, subjectCounts, topicCounts);
         const totalDurationSeconds = customLength * 40; // 40 seconds per question standard
@@ -1370,12 +1881,12 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
                         <input
                           type="number"
                           min="1"
-                          max="200"
+                          max="300"
                           value={customLength}
                           onChange={(e) => {
                             const val = parseInt(e.target.value);
                             if (!isNaN(val)) {
-                              setCustomLength(Math.min(200, Math.max(1, val)));
+                              setCustomLength(Math.min(300, Math.max(1, val)));
                             }
                           }}
                           className="w-full text-center bg-transparent font-mono font-black text-2xl text-white outline-none focus:ring-0"
@@ -1384,7 +1895,7 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
                       </div>
                       <button
                         type="button"
-                        onClick={() => setCustomLength(prev => Math.min(200, prev + 1))}
+                        onClick={() => setCustomLength(prev => Math.min(300, prev + 1))}
                         className="w-8 h-8 flex items-center justify-center bg-slate-800 hover:bg-slate-755 border border-slate-700 hover:border-slate-600 text-slate-200 rounded-lg text-lg font-black cursor-pointer transition-all active:scale-95"
                       >
                         +
@@ -1436,10 +1947,65 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
                         className={`py-2.5 border rounded-xl font-bold transition-all cursor-pointer ${
                           customDifficulty === diff 
                             ? 'bg-purple-950/40 border-purple-400 text-purple-400 ring-1 ring-purple-500/25 font-black' 
-                            : 'bg-slate-950 border-slate-850 hover:bg-slate-850 text-slate-400'
+                            : 'bg-slate-900 border-slate-850 hover:bg-slate-800 text-slate-300'
                         }`}
                       >
                         {diff === 'Easy' ? 'সহজ' : diff === 'Medium' ? 'মাঝারি' : 'কঠিন'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Exam Mode Settings */}
+                <div className="space-y-2 text-left">
+                  <label className="text-slate-400 font-semibold uppercase font-mono tracking-wider block">Exam Mode Configuration (পরীক্ষার ধরন)</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { id: 'Practice', label: 'Practice Mode', sub: 'Instant Solutions' },
+                      { id: 'Mock', label: 'Standard Mock', sub: 'Timer & Final Score' },
+                      { id: 'Live', label: 'Live Simulation', sub: 'Competitor Cohort' },
+                      { id: 'Adaptive', label: 'Adaptive AI Test', sub: 'Dynamic Difficulty' }
+                    ].map((mode) => (
+                      <button
+                        key={mode.id}
+                        type="button"
+                        onClick={() => setSelectedExamModeSetting(mode.id)}
+                        className={`p-2.5 border rounded-xl font-sans text-left transition-all cursor-pointer flex flex-col justify-between h-16 ${
+                          selectedExamModeSetting === mode.id 
+                            ? 'bg-purple-950/40 border-purple-400 text-purple-200 ring-1 ring-purple-500/25' 
+                            : 'bg-slate-900 border-slate-850 hover:bg-slate-800 text-slate-300'
+                        }`}
+                      >
+                        <span className="font-bold block text-[11px]">{mode.label}</span>
+                        <span className="text-[9px] text-slate-500 block leading-tight">{mode.sub}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Question Type Selection */}
+                <div className="space-y-2 text-left">
+                  <label className="text-slate-400 font-semibold uppercase font-mono tracking-wider block">Question Formulation Type (প্রশ্ন কাঠামো)</label>
+                  <div className="flex flex-col gap-2">
+                    {[
+                      { id: 'All', label: 'All Formulate Types (সব ধরনের প্রশ্ন)' },
+                      { id: 'Conceptual', label: 'Conceptual Focus (ধারণাগত ও তত্ত্ব ভিত্তিক)' },
+                      { id: 'Numerical', label: 'Numerical Focus (গাণিতিক বা সমস্যা ভিত্তিক)' },
+                      { id: 'Grammar', label: 'Grammar & Corrections (ব্যাকরণ ও বানানগত)' },
+                      { id: 'Analytical', label: 'Analytical Core (গভীর যুক্তি ও বুদ্ধিদীপ্ত)' }
+                    ].map((type) => (
+                      <button
+                        key={type.id}
+                        type="button"
+                        onClick={() => setSelectedQuestionType(type.id)}
+                        className={`p-2 px-3 border rounded-xl font-sans text-left transition-all cursor-pointer flex items-center justify-between ${
+                          selectedQuestionType === type.id 
+                            ? 'bg-purple-950/45 border-purple-400 text-purple-300' 
+                            : 'bg-slate-900 border-slate-850 hover:bg-slate-800 text-slate-300'
+                        }`}
+                      >
+                        <span className="font-bold text-[10px]">{type.label}</span>
+                        {selectedQuestionType === type.id && <Check className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" />}
                       </button>
                     ))}
                   </div>
@@ -1492,7 +2058,7 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
                             </button>
                             
                             <div className="min-w-0 flex-1">
-                              <h4 className={`text-xs font-bold truncate ${isChecked ? 'text-purple-300' : 'text-slate-400'}`}>
+                              <h4 className={`text-xs font-bold truncate ${isChecked ? 'text-purple-300' : 'text-slate-450'}`}>
                                 {subj.name}
                               </h4>
                               {isChecked ? (
@@ -1500,12 +2066,12 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
                                   <span className="text-[10px] bg-purple-955/80 border border-purple-900/50 text-purple-400 px-1.5 py-0.5 rounded font-mono font-bold uppercase block w-fit">
                                     Allocated: {allocatedSubjCount} Qs
                                   </span>
-                                  <span className="text-[9px] text-slate-505 font-mono">
+                                  <span className="text-[9px] text-slate-500 font-mono">
                                     Ratio Weight: {hasTopicLevel ? 'Topic-Based' : currentSubCount}
                                   </span>
                                 </div>
                               ) : (
-                                <span className="text-[10px] text-slate-505 font-mono block uppercase">
+                                <span className="text-[10px] text-slate-500 font-mono block uppercase">
                                   Unselected
                                 </span>
                               )}
@@ -1526,7 +2092,7 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
                                         [subj.name]: Math.max(1, currentSubCount - 1)
                                       }));
                                     }}
-                                    className="w-5 h-5 flex items-center justify-center bg-slate-850 hover:bg-slate-800 border border-slate-755 text-slate-300 rounded font-black cursor-pointer"
+                                    className="w-5 h-5 flex items-center justify-center bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-350 rounded font-black cursor-pointer animate-none"
                                   >
                                     -
                                   </button>
@@ -1577,44 +2143,78 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
                               const topicKey = `${subj.name}::${topicItem.name}`;
                               const topicValue = topicCounts[topicKey] || 0;
                               const topicAllocCount = currentAllocations.find(item => item.subject === subj.name && item.topic === topicItem.name)?.count || 0;
+                              const subtopicsForThis = getSubtopicsForTopic(topicItem.name);
 
                               return (
-                                <div key={tIdx} className="flex justify-between items-center py-2 text-[11px] text-slate-350">
-                                  <div className="flex flex-col min-w-0 pr-2">
-                                    <span className="font-semibold truncate text-slate-300">{topicItem.name}</span>
-                                    {topicAllocCount > 0 && (
-                                      <span className="text-[9px] text-cyan-455 font-mono font-semibold">
-                                        Allocated: {topicAllocCount} Qs
-                                      </span>
-                                    )}
+                                <div key={tIdx} className="flex flex-col py-2.5 text-[11px] text-slate-350 first:pt-1">
+                                  <div className="flex justify-between items-center">
+                                    <div className="flex flex-col min-w-0 pr-2">
+                                      <span className="font-semibold truncate text-slate-300">{topicItem.name}</span>
+                                      {topicAllocCount > 0 && (
+                                        <span className="text-[9px] text-cyan-400 font-mono font-semibold">
+                                          Allocated: {topicAllocCount} Qs
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="flex items-center gap-1.5 flex-shrink-0 font-sans">
+                                      <span className="text-[10px] text-slate-500 font-mono">Weight:</span>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setTopicCounts(prev => ({
+                                            ...prev,
+                                            [topicKey]: Math.max(0, topicValue - 1)
+                                          }));
+                                        }}
+                                        className="w-5 h-5 flex items-center justify-center bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 rounded cursor-pointer animate-none"
+                                      >
+                                        -
+                                      </button>
+                                      <span className="w-5 text-center font-mono font-bold text-white text-[11px]">{topicValue}</span>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setTopicCounts(prev => ({
+                                            ...prev,
+                                            [topicKey]: Math.min(10, topicValue + 1)
+                                          }));
+                                        }}
+                                        className="w-5 h-5 flex items-center justify-center bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 rounded cursor-pointer animate-none"
+                                      >
+                                        +
+                                      </button>
+                                    </div>
                                   </div>
-                                  <div className="flex items-center gap-1.5 flex-shrink-0 font-sans">
-                                    <span className="text-[10px] text-slate-505 font-mono">Weight:</span>
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        setTopicCounts(prev => ({
-                                          ...prev,
-                                          [topicKey]: Math.max(0, topicValue - 1)
-                                        }));
-                                      }}
-                                      className="w-5 h-5 flex items-center justify-center bg-slate-900 hover:bg-slate-855 border border-slate-800 text-slate-300 rounded cursor-pointer animate-none"
-                                    >
-                                      -
-                                    </button>
-                                    <span className="w-5 text-center font-mono font-bold text-white text-[11px]">{topicValue}</span>
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        setTopicCounts(prev => ({
-                                          ...prev,
-                                          [topicKey]: Math.min(10, topicValue + 1)
-                                        }));
-                                      }}
-                                      className="w-5 h-5 flex items-center justify-center bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 rounded cursor-pointer animate-none"
-                                    >
-                                      +
-                                    </button>
+
+                                  {/* Render Subtopic Matrix */}
+                                  <div className="mt-1.5 pl-2 border-l border-slate-850 space-y-1.5">
+                                    <span className="text-[9px] text-slate-550 uppercase font-mono tracking-wider block">Focus Subtopics Subsets:</span>
+                                    <div className="flex flex-wrap gap-1.5 pt-0.5">
+                                      {subtopicsForThis.map((sub, sIdx) => {
+                                        const isSubSelected = selectedSubtopics.includes(sub);
+                                        return (
+                                          <button
+                                            key={sIdx}
+                                            type="button"
+                                            onClick={() => {
+                                              setSelectedSubtopics(prev => 
+                                                isSubSelected 
+                                                  ? prev.filter(item => item !== sub) 
+                                                  : [...prev, sub]
+                                              );
+                                            }}
+                                            className={`p-1 px-2 text-[9px] border rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
+                                              isSubSelected 
+                                                ? 'bg-purple-950/40 border-purple-500/50 text-purple-350' 
+                                                : 'bg-slate-900/60 border-slate-850 hover:bg-slate-800 text-slate-500'
+                                            }`}
+                                          >
+                                            {isSubSelected && <span className="text-purple-400">✓</span>}
+                                            <span>{sub}</span>
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
                                   </div>
                                 </div>
                               );
@@ -1641,6 +2241,38 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
               </div>
             )}
 
+            {/* Intelligent selection overview tag list */}
+            <div className="p-4 bg-slate-950/60 border border-slate-850 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-left">
+              <div className="space-y-1">
+                <span className="text-[9px] text-slate-500 font-mono tracking-wider uppercase font-bold block">Tailored Blueprints Compilation Summary</span>
+                <div className="flex flex-wrap gap-1.5 items-center">
+                  <span className="bg-slate-900 border border-slate-800 text-slate-300 px-2 py-0.5 rounded-lg text-[10px] font-mono font-medium">
+                    🎯 Qs: {customLength}
+                  </span>
+                  <span className="bg-slate-900 border border-slate-800 text-[#a5b4fc] px-2 py-0.5 rounded-lg text-[10px] font-medium">
+                    📊 Level: {customDifficulty === 'Easy' ? 'সহজ' : customDifficulty === 'Medium' ? 'মাঝারি' : 'কঠিন'}
+                  </span>
+                  <span className="bg-slate-900 border border-slate-800 text-purple-400 px-2 py-0.5 rounded-lg text-[10px] font-medium font-semibold">
+                    ⚙️ Mode: {selectedExamModeSetting}
+                  </span>
+                  <span className="bg-slate-900 border border-slate-800 text-indigo-400 px-2 py-0.5 rounded-lg text-[10px] font-medium font-semibold">
+                    📝 Type: {selectedQuestionType}
+                  </span>
+                  {selectedSubtopics.length > 0 && (
+                    <span className="bg-slate-900 border border-slate-800 text-cyan-400 px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold">
+                      💡 Subtopics Focus: {selectedSubtopics.length}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="text-right text-[10px] text-slate-550 leading-normal font-sans md:max-w-xs">
+                {selectedSubjects.length === 0 
+                  ? "কোনো বিষয় সিলেক্ট করা নেই। ক্লিক করলে আদর্শ সিলেবাস বিন্যাস অনুযায়ী এআই জেনারেট করবে।"
+                  : `${selectedSubjects.length}টি বিষয় এবং নির্বাচিত সাব-টপিক অনুপাত অনুযায়ী প্রশ্নপত্রটি এআই কমপাইল করবে।`
+                }
+              </div>
+            </div>
+
             <button
               onClick={handleCompileCustomExam}
               disabled={isCompiling}
@@ -1663,243 +2295,12 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
         );
       })()}
 
-      {/* 4. MCQ ACTIVE TESTING TERMINAL */}                       setExpandedSubjects(prev => 
-                                    isExpanded ? prev.filter(s => s !== subj.name) : [...prev, subj.name]
-                                  );
-                                }}
-                                className="p-1 px-2.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-400 hover:text-slate-200 rounded-xl text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-all"
-                              >
-                                {hasTopicLevel ? `Adjust Topics (${activeTopicAllocations.length})` : 'Topic Matrix'}
-                                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
-                              </button>
-                            </div>
-                          )}
-                        </div>
 
-                        {/* Expand topics list for checked and expanded subject */}
-                        {isChecked && isExpanded && (
-                          <div className="bg-slate-950 px-4 pb-4 pt-1 border-t border-slate-900 space-y-2 animate-fadeIn divide-y divide-slate-900">
-                            <div className="pt-2 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-                              Topic Weighting and Allocation (টপিক অনুপাত):
-                            </div>
-                            {subj.topics.map((topicItem, tIdx) => {
-                              const topicKey = `${subj.name}::${topicItem.name}`;
-                              const topicValue = topicCounts[topicKey] || 0;
-                              const topicAllocCount = currentAllocations.find(item => item.subject === subj.name && item.topic === topicItem.name)?.count || 0;
 
-                              return (
-                                <div key={tIdx} className="flex justify-between items-center py-2 text-[11px] text-slate-350">
-                                  <div className="flex flex-col min-w-0 pr-2">
-                                    <span className="font-semibold truncate text-slate-300">{topicItem.name}</span>
-                                    {topicAllocCount > 0 && (
-                                      <span className="text-[9px] text-cyan-450 font-mono font-semibold">
-                                        Allocated: {topicAllocCount} Qs
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className="flex items-center gap-1.5 flex-shrink-0">
-                                    <span className="text-[10px] text-slate-500 font-mono">Weight:</span>
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        setTopicCounts(prev => ({
-                                          ...prev,
-                                          [topicKey]: Math.max(0, topicValue - 1)
-                                        }));
-                                      }}
-                                      className="w-5 h-5 flex items-center justify-center bg-slate-900 hover:bg-slate-855 border border-slate-800 text-slate-300 rounded cursor-pointer animate-none"
-                                    >
-                                      -
-                                    </button>
-                                    <span className="w-5 text-center font-mono font-bold text-white text-[11px]">{topicValue}</span>
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        setTopicCounts(prev => ({
-                                          ...prev,
-                                          [topicKey]: Math.min(10, topicValue + 1)
-                                        }));
-                                      }}
-                                      className="w-5 h-5 flex items-center justify-center bg-slate-900 hover:bg-slate-855 border border-slate-800 text-slate-300 rounded cursor-pointer animate-none"
-                                    >
-                                      +
-                                    </button>
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
 
-              </div>
 
-            </div>
 
-            {/* Compilation error and status trigger controls */}
-            {compilingError && (
-              <div className="p-4 bg-rose-950/30 border border-rose-900/40 text-rose-300 rounded-2xl flex items-center gap-3 animate-fadeIn text-xs text-left">
-                <AlertTriangle className="w-5 h-5 flex-shrink-0 text-rose-400" />
-                <div>
-                  <strong className="block font-black uppercase text-rose-400">Compilation Error</strong>
-                  <p className="mt-0.5">{compilingError}</p>
-                </div>
-              </div>
-            )}
 
-            <button
-              onClick={handleCompileCustomExam}
-              disabled={isCompiling}
-              className={`w-full py-4.5 bg-gradient-to-r from-purple-400 to-indigo-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-widest hover:scale-[1.005] active:opacity-90 transition-all flex items-center justify-center gap-2.5 shadow-lg shadow-purple-500/10 cursor-pointer ${
-                isCompiling ? 'opacity-50 cursor-not-allowed saturate-50' : ''
-              }`}
-            >
-              {isCompiling ? (
-                <>
-                  <RefreshCw className="w-4.5 h-4.5 animate-spin" /> Compiling Simulated Paper with AI Engine...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4.5 h-4.5" /> Compile Entire {customLength} Questions Set In Single Click
-                </>
-              )}
-            </button>
-
-          </div>
-        );
-      })()}
-      /* RESIDUE TRUNCATED MID */
-                            className={`p-1.5 rounded-xl border flex-shrink-0 transition-all cursor-pointer ${
-                              isChecked 
-                                ? 'bg-purple-950 border-purple-500 text-purple-400' 
-                                : 'bg-slate-900 border-slate-800 text-slate-600'
-                            }`}
-                          >
-                            <CheckSquare className="w-4 h-4" />
-                          </button>
-                          
-                          <div className="min-w-0 flex-1">
-                            <h4 className={`text-xs font-bold truncate ${isChecked ? 'text-purple-300' : 'text-slate-300'}`}>
-                              {subj.name}
-                            </h4>
-                            <span className="text-[10px] text-slate-500 font-mono block uppercase">
-                              {isChecked ? `Target: ${effectiveCount} questions` : 'Unselected'}
-                            </span>
-                          </div>
-                        </div>
-
-                        {isChecked && (
-                          <div className="flex items-center gap-3">
-                            {/* Counter input for Parent Subject if no topic allocation is set */}
-                            {!hasTopicLevel ? (
-                              <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded-xl px-2 py-1">
-                                <span className="text-[10px] text-slate-500 font-medium">Qty:</span>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSubjectCounts(prev => ({
-                                      ...prev,
-                                      [subj.name]: Math.max(1, currentSubCount - 1)
-                                    }));
-                                  }}
-                                  className="w-5 h-5 flex items-center justify-center bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 rounded font-black cursor-pointer"
-                                >
-                                  -
-                                </button>
-                                <span className="w-6 text-center font-mono font-bold text-white text-xs">{currentSubCount}</span>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSubjectCounts(prev => ({
-                                      ...prev,
-                                      [subj.name]: Math.min(20, currentSubCount + 1)
-                                    }));
-                                  }}
-                                  className="w-5 h-5 flex items-center justify-center bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 rounded font-black cursor-pointer"
-                                >
-                                  +
-                                </button>
-                              </div>
-                            ) : (
-                              <span className="text-[10px] font-mono font-bold text-purple-400 bg-purple-950/50 border border-purple-900/30 px-2 py-1 rounded-xl">
-                                Topic Split Active
-                              </span>
-                            )}
-
-                            {/* Collapse/Expand Topic button */}
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setExpandedSubjects(prev => 
-                                  isExpanded ? prev.filter(s => s !== subj.name) : [...prev, subj.name]
-                                );
-                              }}
-                              className="p-1 px-2.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-400 hover:text-slate-200 rounded-xl text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-all"
-                            >
-                              {hasTopicLevel ? `Adjust Topics (${activeTopicAllocations.length})` : 'Topic Matrix'}
-                              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
-                            </button>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Expand topics list for checked and expanded subject */}
-                      {isChecked && isExpanded && (
-                        <div className="bg-slate-950 px-4 pb-4 pt-1 border-t border-slate-900 space-y-2 animate-fadeIn divide-y divide-slate-900">
-                          <div className="pt-2 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-                            Topic-level allocation (টপিক অনুযায়ী প্রশ্নের বণ্টন):
-                          </div>
-                          {subj.topics.map((topicItem, tIdx) => {
-                            const topicKey = `${subj.name}::${topicItem.name}`;
-                            const topicValue = topicCounts[topicKey] || 0;
-                            return (
-                              <div key={tIdx} className="flex justify-between items-center py-2 text-[11px] text-slate-350">
-                                <span className="font-semibold truncate pr-2">{topicItem.name}</span>
-                                <div className="flex items-center gap-1.5 flex-shrink-0">
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      setTopicCounts(prev => ({
-                                        ...prev,
-                                        [topicKey]: Math.max(0, topicValue - 1)
-                                      }));
-                                    }}
-                                    className="w-5 h-5 flex items-center justify-center bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 rounded cursor-pointer animate-none"
-                                  >
-                                    -
-                                  </button>
-                                  <span className="w-5 text-center font-mono font-bold text-white text-[11px]">{topicValue}</span>
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      setTopicCounts(prev => ({
-                                        ...prev,
-                                        [topicKey]: Math.min(10, topicValue + 1)
-                                      }));
-                                    }}
-                                    className="w-5 h-5 flex items-center justify-center bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 rounded cursor-pointer animate-none"
-                                  >
-                                    +
-                                  </button>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-            </div>
-
-          </div>
-
-          /* DUPLICATE RESIDUE BUTTON CLEAN */
 
       {/* 4. MCQ ACTIVE TESTING TERMINAL */}
       {activeTab === 'simulation' && (
@@ -1916,13 +2317,83 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
                       <CheckCircle2 className="w-5.5 h-5.5 text-emerald-400" /> Exam Session Completed!
                     </h3>
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap items-center gap-3">
+                    {/* Compact PDF Print Layout Switcher */}
+                    <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[10px]">
+                      <span className="px-1.5 text-slate-500 font-bold uppercase tracking-wider font-mono">Format:</span>
+                      <button
+                        type="button"
+                        onClick={() => setPdfLayoutMode('concise')}
+                        className={`px-2 py-0.5 rounded-lg transition-all font-bold cursor-pointer ${
+                          pdfLayoutMode === 'concise'
+                            ? 'bg-slate-800 text-cyan-400 font-extrabold'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                        title="অতি-সংক্ষেপ ২-কলাম বিন্যাস (কাগজ সর্বোচ্চ সাশ্রয় করবে)"
+                      >
+                        ⚡ Concise
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPdfLayoutMode('double')}
+                        className={`px-2 py-0.5 rounded-lg transition-all font-bold cursor-pointer ${
+                          pdfLayoutMode === 'double'
+                            ? 'bg-slate-800 text-emerald-400 font-extrabold'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                        title="২-কলাম প্রিণ্ট বিন্যাস (কাগজ ও প্রিন্টিং খরচ বাঁচাবে)"
+                      >
+                        📄 Double
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPdfLayoutMode('single')}
+                        className={`px-2 py-0.5 rounded-lg transition-all font-bold cursor-pointer ${
+                          pdfLayoutMode === 'single'
+                            ? 'bg-slate-850 text-white'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                        title="১-কলাম সাধারণ প্রিণ্ট বিন্যাস"
+                      >
+                        📃 Single
+                      </button>
+                    </div>
+
+                    {/* Compact Answers Switcher */}
+                    <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[10px]" style={{ userSelect: 'none' }}>
+                      <span className="px-1.5 text-slate-500 font-bold uppercase tracking-wider font-mono">Answers:</span>
+                      <button
+                        type="button"
+                        onClick={() => setIncludeAnswersInPdf(true)}
+                        className={`px-2 py-0.5 rounded-lg transition-all font-bold cursor-pointer ${
+                          includeAnswersInPdf
+                            ? 'bg-slate-800 text-emerald-400 font-extrabold'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                        title="উত্তরপত্র সহ প্রিণ্ট করুন"
+                      >
+                        ✓ Include
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIncludeAnswersInPdf(false)}
+                        className={`px-2 py-0.5 rounded-lg transition-all font-bold cursor-pointer ${
+                          !includeAnswersInPdf
+                            ? 'bg-slate-800 text-rose-400 font-extrabold'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                        title="উত্তরমালা ছাড়া প্রিণ্ট করুন"
+                      >
+                        ✕ Exclude
+                      </button>
+                    </div>
+
                     <button
-                      onClick={() => handlePrintExam(questions, "RankFlow AI Practice Paper with Full Solutions", true)}
+                      onClick={() => handlePrintExam(questions, "RankFlow AI Practice Paper with Full Solutions", includeAnswersInPdf)}
                       className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 text-emerald-400 font-bold rounded-xl text-xs transition-all cursor-pointer flex items-center gap-1"
                     >
                       <FileDown className="w-3.5 h-3.5" />
-                      Export Paper + Solutions
+                      Export Paper {includeAnswersInPdf ? '+ Solutions' : ''}
                     </button>
                     <button
                       disabled={isExportingGd}
@@ -2026,6 +2497,15 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
           ) : (
             <div className={`space-y-6 ${focusMode ? 'max-w-xl mx-auto' : ''}`}>
               
+              {isFallbackActive && (
+                <div className="p-3 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-2xl text-[11px] text-left flex items-start gap-2.5 leading-relaxed animate-fadeIn">
+                  <span className="text-[13px] mt-0.5">⚡</span>
+                  <div>
+                    <span className="font-bold">সিল্যাবস ব্যাকআপ সামগ্রী সক্রিয় (Syllabus Backup Active):</span> উচ্চ ট্রাফিক বা এআই ইঞ্জিন লিমিটের কারণে RankFlow AI স্বয়ংক্রিয়ভাবে একটি আদর্শ প্রফেশনাল মডেল প্রশ্নের সেট প্রস্তুত করেছে। আপনার অনুশীলন কোনো ব্যাঘাত ছাড়াই সচল রয়েছে!
+                  </div>
+                </div>
+              )}
+
               {/* Active Header Row */}
               <div className="flex items-center justify-between border-b border-slate-900 pb-4">
                 <div className="space-y-0.5 text-left">
@@ -2077,9 +2557,79 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
                     </div>
                     <div className="text-slate-500 text-[10px]">এই কাস্টম টেস্টটি প্রিন্ট করে অফলাইনে প্র্যাকটিস করুন অথবা গুগল ড্রাইভে সংরক্ষণ করুন।</div>
                   </div>
-                  <div className="flex gap-2 w-full sm:w-auto self-end sm:self-auto">
+                  <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto self-end sm:self-auto">
+                    {/* Compact PDF Print Layout Switcher */}
+                    <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[10px]" style={{ userSelect: 'none' }}>
+                      <span className="px-1.5 text-slate-500 font-bold uppercase tracking-wider font-mono">Format:</span>
+                      <button
+                        type="button"
+                        onClick={() => setPdfLayoutMode('concise')}
+                        className={`px-2 py-0.5 rounded-lg transition-all font-bold cursor-pointer ${
+                          pdfLayoutMode === 'concise'
+                            ? 'bg-slate-800 text-cyan-400 font-extrabold'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                        title="অতি-সংক্ষেপ ২-কলাম বিন্যাস (কাগজ সর্বোচ্চ সাশ্রয় করবে)"
+                      >
+                        ⚡ Concise
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPdfLayoutMode('double')}
+                        className={`px-2 py-0.5 rounded-lg transition-all font-bold cursor-pointer ${
+                          pdfLayoutMode === 'double'
+                            ? 'bg-slate-800 text-emerald-400 font-extrabold'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                        title="২-কলাম প্রিণ্ট বিন্যাস (কাগজ বাঁচাবে)"
+                      >
+                        📄 Double
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPdfLayoutMode('single')}
+                        className={`px-2 py-0.5 rounded-lg transition-all font-bold cursor-pointer ${
+                          pdfLayoutMode === 'single'
+                            ? 'bg-slate-850 text-white'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                        title="১-কলাম সাধারণ প্রিণ্ট বিন্যাস"
+                      >
+                        📃 Single
+                      </button>
+                    </div>
+
+                    {/* Compact Answers Switcher */}
+                    <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[10px]" style={{ userSelect: 'none' }}>
+                      <span className="px-1.5 text-slate-500 font-bold uppercase tracking-wider font-mono">Answers:</span>
+                      <button
+                        type="button"
+                        onClick={() => setIncludeAnswersInPdf(true)}
+                        className={`px-2 py-0.5 rounded-lg transition-all font-bold cursor-pointer ${
+                          includeAnswersInPdf
+                            ? 'bg-slate-800 text-emerald-400 font-extrabold'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                        title="উত্তরপত্র সহ প্রিণ্ট করুন"
+                      >
+                        ✓ Include
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIncludeAnswersInPdf(false)}
+                        className={`px-2 py-0.5 rounded-lg transition-all font-bold cursor-pointer ${
+                          !includeAnswersInPdf
+                            ? 'bg-slate-800 text-rose-400 font-extrabold'
+                            : 'text-slate-400 hover:text-slate-200'
+                        }`}
+                        title="উত্তরমালা ছাড়া প্রিণ্ট করুন"
+                      >
+                        ✕ Exclude
+                      </button>
+                    </div>
+
                     <button
-                      onClick={() => handlePrintExam(questions, "RankFlow AI Offline Exam Paper", true)}
+                      onClick={() => handlePrintExam(questions, "RankFlow AI Offline Exam Paper", includeAnswersInPdf)}
                       className="px-3.5 py-2 bg-emerald-555 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 text-emerald-400 font-bold rounded-xl text-[11px] whitespace-nowrap cursor-pointer transition-all flex items-center gap-1"
                     >
                       <FileDown className="w-3.5 h-3.5" />
@@ -2410,8 +2960,81 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="flex justify-between items-center bg-slate-950/20 p-3 rounded-xl border border-slate-900">
-                <span className="text-xs text-slate-400 font-medium font-sans">মোট পরীক্ষা সেশন: {examHistory.length} টি</span>
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-950/20 p-3 rounded-xl border border-slate-900 text-xs">
+                <div className="flex items-center gap-3">
+                  <span className="text-slate-400 font-medium font-sans">মোট সেশন: {examHistory.length} টি</span>
+                  
+                  {/* Global Layout Switcher for Log History Prints */}
+                  <div className="flex items-center gap-1 bg-slate-950 p-0.5 rounded-lg border border-[#1e293b] text-[9px]" style={{ userSelect: 'none' }}>
+                    <span className="px-1 text-slate-500 font-extrabold uppercase tracking-wider font-mono">PDF:</span>
+                    <button
+                      type="button"
+                      onClick={() => setPdfLayoutMode('concise')}
+                      className={`px-1.5 py-0.5 rounded transition-all font-bold cursor-pointer ${
+                        pdfLayoutMode === 'concise'
+                          ? 'bg-slate-850 text-cyan-400 font-black'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                      title="অতি-সংক্ষেপ ২-কলাম বিন্যাস"
+                    >
+                      ⚡ Concise
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPdfLayoutMode('double')}
+                      className={`px-1.5 py-0.5 rounded transition-all font-bold cursor-pointer ${
+                        pdfLayoutMode === 'double'
+                          ? 'bg-slate-850 text-emerald-400 font-black'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                      title="২-কলাম প্রিণ্ট বিন্যাস"
+                    >
+                      📄 Double
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPdfLayoutMode('single')}
+                      className={`px-1.5 py-0.5 rounded transition-all font-bold cursor-pointer ${
+                        pdfLayoutMode === 'single'
+                          ? 'bg-slate-850 text-white'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                      title="১-কলাম সাধারণ বিন্যাস"
+                    >
+                      📃 Single
+                    </button>
+                  </div>
+
+                  {/* Compact Answers Switcher for History */}
+                  <div className="flex items-center gap-1 bg-slate-950 p-0.5 rounded-lg border border-[#1e293b] text-[9px]" style={{ userSelect: 'none' }}>
+                    <span className="px-1 text-slate-500 font-extrabold uppercase tracking-wider font-mono">Answers:</span>
+                    <button
+                      type="button"
+                      onClick={() => setIncludeAnswersInPdf(true)}
+                      className={`px-1.5 py-0.5 rounded transition-all font-bold cursor-pointer ${
+                        includeAnswersInPdf
+                          ? 'bg-slate-850 text-emerald-400 font-black'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                      title="উত্তরত্র সহ প্রিণ্ট করুন"
+                    >
+                      ✓ Include
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIncludeAnswersInPdf(false)}
+                      className={`px-1.5 py-0.5 rounded transition-all font-bold cursor-pointer ${
+                        !includeAnswersInPdf
+                          ? 'bg-slate-850 text-rose-400 font-black'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                      title="উত্তরমালা ছাড়া প্রিণ্ট করুন"
+                    >
+                      ✕ Exclude
+                    </button>
+                  </div>
+                </div>
+
                 <button
                   onClick={() => {
                     if (confirm("আপনি কি নিশ্চিতভাবে সম্পূর্ণ পরীক্ষার ইতিহাস মুছে ফেলতে চান? এটি পুনরুদ্ধার করা যাবে না।")) {
@@ -2494,7 +3117,7 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
                         {/* Offline practice tools */}
                         <div className="flex gap-2">
                           <button
-                            onClick={() => handlePrintExam(session.questions, `RankFlow AI Offline Exam - ${session.mode}`, true)}
+                            onClick={() => handlePrintExam(session.questions, `RankFlow AI Offline Exam - ${session.mode}`, includeAnswersInPdf)}
                             className="px-3 py-1.5 bg-slate-950 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 text-slate-300 rounded-xl text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
                             title="Print or Save as PDF"
                           >
