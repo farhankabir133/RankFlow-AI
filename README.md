@@ -7,6 +7,9 @@
 [![Database](https://img.shields.io/badge/Firebase-Firestore-orange?style=flat-hard&logo=firebase)](https://firebase.google.com)
 [![AI--Engine](https://img.shields.io/badge/Google--GenAI-Gemini--Flash-8e44ad?style=flat-hard&logo=google-cloud)](https://ai.google.dev/)
 
+> ### 📢 Live Soon! (শীঘ্রই লাইভ হচ্ছে!)
+> **RankFlow AI is launching soon!** We are putting the final touches on our production pipelines, cloud scalability features, and multi-modal models. **Stay tuned!** ✨
+
 **RankFlow AI** is an advanced, AI-powered intelligent Learning Operating System designed specifically for competitive exam seekers, university aspirants, and job candidates in Bangladesh. Powered by React 19, Tailwind v4, Express Node.js, and Google's multi-modal Gemini API, it provides real-time rank simulations, personalized guidance, and persistent preparation metrics.
 
 This platform re-imagines competitive learning from the ground up, delivering deep analytics, spaced-repetition revisions, and written answer evaluations instead of generic quiz pages.
