@@ -20,7 +20,7 @@ service cloud.firestore {
       return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
     }
 
-    // Entity validator logic for UserProfile (No DB requests for static evaluation speed)
+    // Entity validator logic for UserProfile
     function isValidUserProfile(data) {
       return data.name is string && data.name.size() <= 128
         && data.examType is string && (data.examType == 'BCS' || data.examType == 'Admission' || data.examType == 'SSC' || data.examType == 'HSC')
@@ -29,12 +29,30 @@ service cloud.firestore {
         && data.level is int && data.level >= 0;
     }
 
-    // Rules for /users/{userId} parent mapping
+    // Rules for /users/{userId}
     match /users/{userId} {
       allow get: if isOwner(userId);
       allow create: if isOwner(userId) && isValidId(userId) && isValidUserProfile(request.resource.data);
       allow update: if isOwner(userId) && isValidUserProfile(request.resource.data);
       allow delete: if isOwner(userId);
+    }
+
+    // Rules for /analytics/{userId}
+    match /analytics/{userId} {
+      allow get: if isOwner(userId);
+      allow write: if isOwner(userId) && isValidId(userId);
+    }
+
+    // Rules for /memory/{userId}
+    match /memory/{userId} {
+      allow get: if isOwner(userId);
+      allow write: if isOwner(userId) && isValidId(userId);
+    }
+
+    // Rules for /circulars/{circularId}
+    match /circulars/{circularId} {
+      allow read: if isSignedIn();
+      allow write: if false; // Only manageable server-side by system
     }
   }
 }

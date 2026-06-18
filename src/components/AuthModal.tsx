@@ -10,7 +10,7 @@ interface AuthModalProps {
 }
 
 export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
-  const { signUpEmail, signInEmail, signInGoogle } = useAuth();
+  const { signUpEmail, signInEmail, signInGoogle, signInAsGuest } = useAuth();
   
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
@@ -24,23 +24,27 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
   const handleAuthError = (err: any) => {
     console.error(err);
     const code = err?.code || '';
-    switch (code) {
-      case 'auth/user-not-found':
-      case 'auth/wrong-password':
-      case 'auth/invalid-credential':
-        setError('ভুল ইমেইল অথবা পাসওয়ার্ড প্রদান করেছেন (Incorrect email or password)');
-        break;
-      case 'auth/email-already-in-use':
-        setError('এই ইমেইলটি ইতিমধ্যে ব্যবহৃত হচ্ছে (This email is already registered)');
-        break;
-      case 'auth/weak-password':
-        setError('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে (Password must be at least 6 characters)');
-        break;
-      case 'auth/invalid-email':
-        setError('দয়া করে সঠিক ইমেইল প্রদান করুন (Please provide a valid email)');
-        break;
-      default:
-        setError(err?.message || 'একটি ত্রুটি ঘটেছে। আবার চেষ্টা করুন (An error occurred. Please try again)');
+    const message = err?.message || '';
+
+    if (code === 'auth/email-already-in-use' || message.includes('auth/email-already-in-use')) {
+      setError('এই ইমেইলটি ইতিমধ্যে ব্যবহৃত হচ্ছে। অনুগ্রহ করে লগইন করার চেষ্টা করুন (This email is already in use. Please try logging in instead)');
+    } else if (code === 'auth/operation-not-allowed' || message.includes('auth/operation-not-allowed')) {
+      setError('ফায়ারবেস অথেনটিকেশন প্যানেলে ইমেইল/পাসওয়ার্ড বা গুগল প্রোভাইডার সচল করা নেই। অনুগ্রহ করে আপনার ফায়ারবেস কনসোল থেকে এটি সচল করুন (Email/Password or Google Sign-in is disabled in your Firebase console. Please enable it in your project Settings)');
+    } else if (code === 'auth/weak-password' || message.includes('auth/weak-password')) {
+      setError('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে (Password must be at least 6 characters)');
+    } else if (code === 'auth/invalid-email' || message.includes('auth/invalid-email')) {
+      setError('দয়া করে সঠিক ইমেইল প্রদান করুন (Please provide a valid email)');
+    } else if (
+      code === 'auth/user-not-found' || 
+      code === 'auth/wrong-password' || 
+      code === 'auth/invalid-credential' ||
+      message.includes('auth/user-not-found') ||
+      message.includes('auth/wrong-password') ||
+      message.includes('auth/invalid-credential')
+    ) {
+      setError('ভুল ইমেইল অথবা পাসওয়ার্ড প্রদান করেছেন (Incorrect email or password)');
+    } else {
+      setError(err?.message || 'একটি ত্রুটি ঘটেছে। আবার চেষ্টা করুন (An error occurred. Please try again)');
     }
   };
 
@@ -54,6 +58,19 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
     } catch (err: any) {
       setLoading(false);
       handleAuthError(err);
+    }
+  };
+
+  const handleGuestSignIn = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await signInAsGuest(name || email.split('@')[0] || 'Farhan Kabir (Guest)');
+      setLoading(false);
+      onSuccess();
+    } catch (err: any) {
+      setLoading(false);
+      setError(err?.message || 'Guest/Sandbox login failed');
     }
   };
 
@@ -256,14 +273,25 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
         </div>
 
         {/* Alternative Google Provider Auth */}
-        <button
-          onClick={handleGoogleSignIn}
-          disabled={loading}
-          className="w-full py-3 bg-slate-950 hover:bg-slate-850 border border-slate-850 hover:border-cyan-500/20 text-slate-300 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer"
-        >
-          <Chrome className="w-4 h-4 text-cyan-400" />
-          <span>Google দিয়ে সাইন-ইন (Sign In with Google)</span>
-        </button>
+        <div className="grid grid-cols-1 gap-2.5">
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={loading}
+            className="w-full py-3 bg-slate-950 hover:bg-slate-850 border border-slate-850 hover:border-cyan-500/20 text-slate-300 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer"
+          >
+            <Chrome className="w-4 h-4 text-cyan-400" />
+            <span>Google দিয়ে সাইন-ইন (Sign In with Google)</span>
+          </button>
+
+          <button
+            onClick={handleGuestSignIn}
+            disabled={loading}
+            className="w-full py-3 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 hover:from-emerald-500/15 hover:to-teal-500/15 border border-emerald-500/30 hover:border-emerald-500/50 text-emerald-400 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg shadow-emerald-500/5"
+          >
+            <Sparkles className="w-4 h-4 text-emerald-400" />
+            <span>অতিথি হিসেবে প্রবেশ (Continue as Guest / Local Sandbox)</span>
+          </button>
+        </div>
 
         {/* Guide notification details */}
         <div className="mt-5 text-[10px] text-slate-500 leading-normal text-center bg-slate-950/40 p-2.5 rounded-lg border border-slate-850/30">

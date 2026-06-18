@@ -564,6 +564,43 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
     return credential.accessToken;
   };
 
+  const handleDownloadTextOffline = (questionsToExport: Question[], baseTitle: string) => {
+    const fileName = `${baseTitle} - RankFlow AI Practice.txt`;
+    const dateStr = new Date().toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
+    let bodyText = `RANKFLOW AI - EXAM PRACTICE SHEET\n`;
+    bodyText += `তারিখ: ${dateStr}\n`;
+    bodyText += `মোট প্রশ্ন: ${questionsToExport.length} টি\n`;
+    bodyText += `কোর্স স্ট্রিম: ${currentMode.type}\n`;
+    bodyText += `=========================================\n\n`;
+
+    questionsToExport.forEach((q, idx) => {
+      bodyText += `${idx + 1}. ${q.text}\n`;
+      bodyText += `বিষয়: ${q.subject} | টপিক: ${q.topic} | কঠিনতা: ${q.difficulty}\n`;
+      q.options.forEach((opt, oIdx) => {
+        bodyText += `   [${String.fromCharCode(65 + oIdx)}] ${opt}\n`;
+      });
+      bodyText += `\n`;
+    });
+
+    bodyText += `\n=========================================\n`;
+    bodyText += `ANSWER KEYS & SOLUTIONS (উত্তরমালা ও ব্যাখ্যা শিট)\n`;
+    bodyText += `=========================================\n`;
+    questionsToExport.forEach((q, idx) => {
+      bodyText += `প্রশ্ন ${idx + 1}: সঠিক উত্তর [${String.fromCharCode(65 + q.correctIndex)}] ${q.options[q.correctIndex]}\n`;
+      bodyText += `ব্যাখ্যা: ${q.explanations?.bn || 'সমাধান ডাটাবেজে সংরক্ষিত রয়েছে।'}\n\n`;
+    });
+
+    bodyText += `\n\nGenerated with RankFlow AI. Prep intelligently, measure accurately.`;
+
+    const element = document.createElement("a");
+    const file = new Blob([bodyText], { type: 'text/plain;charset=utf-8' });
+    element.href = URL.createObjectURL(file);
+    element.download = fileName;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
   const handleExportGoogleDocs = async (questionsToExport: Question[], baseTitle: string) => {
     setIsExportingGd(true);
     const fileName = `${baseTitle} - RankFlow AI Offline Exam.txt`;
@@ -649,13 +686,18 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
       setTimeout(() => setExportMessage(''), 4000);
     } catch (err: any) {
       console.error('Google Docs export failed:', err);
+      const isOpeNotAllowed = err?.code === 'auth/operation-not-allowed' || err?.message?.includes('auth/operation-not-allowed') || err?.message?.includes('operation-not-allowed');
+      const errorMsg = isOpeNotAllowed 
+        ? 'আপনার ফায়ারবেস কনসোলে Google Auth সচল করা নেই। আপনি চাইলে নিচের অফলাইন বোতামে ক্লিক করে এখনই টেক্সট ফাইলটি আপনার হার্ডড্রাইভে ডাউনলোড করতে পারেন।'
+        : (err.message || 'রপ্তানি করতে সমস্যা হয়েছে।');
+
       setConfirmationExport({
         fileName,
         type: 'GDrive',
         status: 'error',
-        errorMsg: err.message || 'রপ্তানি করতে সমস্যা হয়েছে।'
+        errorMsg: errorMsg
       });
-      setExportMessage(`ত্রুটি: ${err.message || 'রপ্তানি করতে সমস্যা হয়েছে।'}`);
+      setExportMessage(`ত্রুটি: ${errorMsg}`);
       setTimeout(() => setExportMessage(''), 5000);
     } finally {
       setIsExportingGd(false);
@@ -1498,13 +1540,13 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
             </div>
           </div>
 
-          <div className="flex gap-2 pt-1">
+          <div className="flex flex-col gap-2 pt-1">
             {confirmationExport.linkUrl ? (
               <a 
                 href={confirmationExport.linkUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 py-2 px-3 bg-gradient-to-r from-purple-400 to-indigo-500 hover:from-purple-550 hover:to-indigo-550 text-slate-950 text-[10.5px] font-black rounded-xl text-center flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                className="w-full py-2 px-3 bg-gradient-to-r from-purple-400 to-indigo-500 hover:from-purple-550 hover:to-indigo-550 text-slate-950 text-[10.5px] font-black rounded-xl text-center flex items-center justify-center gap-1.5 transition-all cursor-pointer"
               >
                 <ExternalLink className="w-3.5 h-3.5" /> View in Google Drive
               </a>
@@ -1513,13 +1555,25 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
                 onClick={() => {
                   alert("অনুগ্রহ করে আপনার ব্রাউজারের প্রিন্ট ডায়ালগ অথবা লোকাল ডাউনলোড ফোল্ডার চেক করুন।");
                 }}
-                className="flex-1 py-1.5 px-3 bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-slate-650 text-slate-300 text-[10.5px] font-bold rounded-xl text-center flex items-center justify-center gap-1.5 transition-all cursor-pointer animate-none"
+                className="w-full py-1.5 px-3 bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-slate-650 text-slate-300 text-[10.5px] font-bold rounded-xl text-center flex items-center justify-center gap-1.5 transition-all cursor-pointer animate-none"
               >
                 <FileDown className="w-3.5 h-3.5" /> Close Print Dialog
               </button>
             ) : (
-              <div className="text-[10px] text-slate-500 italic">
-                {confirmationExport.status === 'creating' ? 'Syncing securely with Google Workspace Node...' : confirmationExport.errorMsg || 'Process halted.'}
+              <div className="space-y-2">
+                <div className="text-[10px] text-slate-400 leading-relaxed">
+                  {confirmationExport.status === 'creating' ? 'Syncing securely with Google Workspace Node...' : confirmationExport.errorMsg || 'Process halted.'}
+                </div>
+                {confirmationExport.status === 'error' && (
+                  <button
+                    onClick={() => {
+                      handleDownloadTextOffline(questions, "RankFlow AI practice Sheet");
+                    }}
+                    className="w-full py-2 px-3 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 hover:border-emerald-500/50 text-emerald-400 text-[10.5px] font-bold rounded-xl text-center flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  >
+                    <FileDown className="w-3.5 h-3.5" /> টেক্সট ফাইল (.txt) ডাউনলোড করুন
+                  </button>
+                )}
               </div>
             )}
           </div>

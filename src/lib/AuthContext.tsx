@@ -67,6 +67,7 @@ interface AuthContextType {
   signUpEmail: (email: string, password: string, name: string) => Promise<void>;
   signInEmail: (email: string, password: string) => Promise<void>;
   signInGoogle: () => Promise<void>;
+  signInAsGuest: (name: string) => Promise<void>;
   signOutUser: () => Promise<void>;
   updateUserProfile: (newProfile: Partial<UserProfile>) => Promise<void>;
 }
@@ -98,7 +99,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Monitor auth state changes on mount
   useEffect(() => {
+    const savedGuestUser = localStorage.getItem('rankflow_guest_user');
+    const savedGuestProfile = localStorage.getItem('rankflow_guest_profile');
+
+    if (savedGuestUser && savedGuestProfile) {
+      try {
+        setUser(JSON.parse(savedGuestUser) as unknown as User);
+        setProfile(JSON.parse(savedGuestProfile) as UserProfile);
+        setLoading(false);
+        return;
+      } catch (e) {
+        console.error("Error reading saved guest session: ", e);
+      }
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      const activeGuest = localStorage.getItem('rankflow_guest_user');
+      if (activeGuest) {
+        setLoading(false);
+        return;
+      }
+
       setUser(currentUser);
       if (currentUser) {
         // Fetch or create user Profile in firestore
@@ -182,9 +203,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const signInAsGuest = async (guestName: string) => {
+    setLoading(true);
+    const resolvedGuestName = guestName.trim() || 'Farhan Kabir (Guest)';
+    const mockUserItem = {
+      uid: 'demo-guest-uid',
+      email: 'guest@farhankabir.dev',
+      displayName: resolvedGuestName,
+      emailVerified: true,
+      isAnonymous: false,
+      phoneNumber: '',
+      providerId: 'custom',
+    };
+    const mockProfileItem: UserProfile = {
+      ...defaultUserProfile,
+      name: resolvedGuestName
+    };
+    localStorage.setItem('rankflow_guest_user', JSON.stringify(mockUserItem));
+    localStorage.setItem('rankflow_guest_profile', JSON.stringify(mockProfileItem));
+    setUser(mockUserItem as unknown as User);
+    setProfile(mockProfileItem);
+    setLoading(false);
+  };
+
   const signOutUser = async () => {
     setLoading(true);
     try {
+      localStorage.removeItem('rankflow_guest_user');
+      localStorage.removeItem('rankflow_guest_profile');
       await signOut(auth);
       setProfile(null);
       setUser(null);
@@ -195,14 +241,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const updateUserProfile = async (newProfile: Partial<UserProfile>) => {
-    if (!user) return;
-    const userDocRef = doc(db, 'users', user.uid);
-    const pathStr = `users/${user.uid}`;
-    
+    const activeGuest = localStorage.getItem('rankflow_guest_user');
+    const isMockUser = activeGuest || user?.uid === 'demo-guest-uid';
+
     const updatedProfile = {
       ...(profile || defaultUserProfile),
       ...newProfile
     };
+
+    if (isMockUser) {
+      setProfile(updatedProfile);
+      localStorage.setItem('rankflow_guest_profile', JSON.stringify(updatedProfile));
+      return;
+    }
+
+    if (!user) return;
+    const userDocRef = doc(db, 'users', user.uid);
+    const pathStr = `users/${user.uid}`;
 
     try {
       await setDoc(userDocRef, updatedProfile);
@@ -219,6 +274,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signUpEmail,
     signInEmail,
     signInGoogle,
+    signInAsGuest,
     signOutUser,
     updateUserProfile
   };
