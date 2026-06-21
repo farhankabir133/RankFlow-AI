@@ -3,7 +3,7 @@ import { AnalyticsRepo } from "../repositories/analytics.repo";
 import { UserRepo } from "../repositories/user.repo";
 import { PercentileService } from "../services/analytics/percentile.service";
 import { UserAnalyticsModel } from "../models/analytics.model";
-import { defaultUserProfile } from "../src/lib/AuthContext";
+import { DEFAULT_USER_PROFILE } from "../src/backend/constants/defaults";
 
 const router = Router();
 
@@ -51,7 +51,7 @@ router.get("/dashboard", async (req, res) => {
   try {
     let profile = await UserRepo.getProfile(userId);
     if (!profile) {
-      profile = { ...defaultUserProfile };
+      profile = { ...DEFAULT_USER_PROFILE };
     }
 
     let stats = await AnalyticsRepo.getAnalytics(userId);

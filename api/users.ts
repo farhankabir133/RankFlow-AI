@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { UserRepo } from "../repositories/user.repo";
 import { XpService } from "../services/analytics/xp.service";
-import { defaultUserProfile } from "../src/lib/AuthContext";
+import { DEFAULT_USER_PROFILE } from "../src/backend/constants/defaults";
 
 const router = Router();
 
@@ -13,7 +13,7 @@ router.get("/me", async (req, res) => {
     if (!profile) {
       // Lazy init profile based on Farhan Kabir default
       profile = {
-        ...defaultUserProfile,
+        ...DEFAULT_USER_PROFILE,
         name: "Farhan Kabir"
       };
       await UserRepo.setProfile(userId, profile);
@@ -50,7 +50,7 @@ router.post("/xp", async (req, res) => {
   try {
     let profile = await UserRepo.getProfile(userId);
     if (!profile) {
-      profile = { ...defaultUserProfile };
+      profile = { ...DEFAULT_USER_PROFILE };
     }
 
     const { newXp, newLevel, leveledUp } = XpService.awardXp(profile.xp, xpAmount);
