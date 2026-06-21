@@ -1,4 +1,14 @@
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_BASE = (() => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl) return envUrl;
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    if (hostname.includes('github.io')) {
+      return 'https://rankflow-ai-production.up.railway.app';
+    }
+  }
+  return 'http://localhost:3000';
+})();
 
 export class ApiError extends Error {
   statusCode?: number;

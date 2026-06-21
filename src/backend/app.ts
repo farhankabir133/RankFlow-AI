@@ -36,6 +36,7 @@ app.use(
           "https://*.firebaseapp.com",
           "https://*.google.com",
           "https://*.perplexity.ai",
+          "https://*.railway.app",
           "wss://localhost:*",
           "ws://localhost:*",
         ],
