@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   Sparkles, Award, TrendingUp, RefreshCw, AlertTriangle, 
   MapPin, Brain, Calendar, Clock, ArrowRight, Zap, Target, BookOpen, 
   MessageSquare, BarChart, Settings, LogOut, FileText, UserCheck, CheckCircle2, User,
-  ChevronDown
+  ChevronDown, Menu, X, Globe
 } from 'lucide-react';
 
 import { UserProfile, RevisionSchedule, Circular, AnalyticsData, ExamType } from './types';
@@ -17,157 +18,109 @@ import WrittenEvaluator from './components/WrittenEvaluator';
 import CareerOS from './components/CareerOS';
 import ProfileIdentity from './components/ProfileIdentity';
 import { useAuth, defaultUserProfile } from './lib/AuthContext';
+import { useLanguage } from './lib/LanguageContext';
 import AuthModal from './components/AuthModal';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import { useUserData } from './lib/useUserData';
+import { saveExamSession, seedRevisionItemsFromSession, updateRevisionItem } from './lib/firestoreHelpers';
 
 export default function App() {
-  
-  // App Phase States: 'landing' | 'onboarding' | 'app'
-  const [appPhase, setAppPhase] = useState<'landing' | 'onboarding' | 'app'>('landing');
+  const { language, setLanguage, t } = useLanguage();
   const [selectedExamType, setSelectedExamType] = useState<ExamType>('BCS');
   
   // Onboarding Setup State Form
-  const [onboardName, setOnboardName] = useState<string>('Farhan Kabir');
-  const [onboardPhone, setOnboardPhone] = useState<string>('01723456789');
+  const [onboardName, setOnboardName]       = useState<string>('');
+  const [onboardPhone, setOnboardPhone]     = useState<string>('');
   const [onboardDistrict, setOnboardDistrict] = useState<string>('Dhaka');
-  const [onboardGoal, setOnboardGoal] = useState<string>('Get selected in general cadres');
   const [diagnosticScore, setDiagnosticScore] = useState<number | null>(null);
-  const [onboardStep, setOnboardStep] = useState<number>(0);
+  const [onboardStep, setOnboardStep]       = useState<number>(0);
 
-  // Authentication Context Hook Mapping
+  // Authentication
   const { user, profile: authProfile, signOutUser, updateUserProfile } = useAuth();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-
-  // Reconciled active user profile
   const profile = authProfile || defaultUserProfile;
 
-  // React to Auth State Changes
-  useEffect(() => {
-    if (user) {
-      if (appPhase === 'landing') {
-        setAppPhase('app');
-      }
-    } else {
-      setAppPhase('landing');
-    }
-  }, [user]);
+  // ─── REAL-TIME FIRESTORE DATA ────────────────────────────────────────────────
+  const { revisionItems, examSessions, analyticsData, analyticsSummary } = useUserData();
 
-
-  // Active section route navigation state
-  const [activeTab, setActiveTab] = useState<string>('dashboard');
-  const [activeTutorTopic, setActiveTutorTopic] = useState<string | undefined>(undefined);
-  const [isExamEngineExpanded, setIsExamEngineExpanded] = useState<boolean>(true);
-  const [selectedExamMode, setSelectedExamMode] = useState<{ type: 'BCS' | 'Bank' | 'Custom'; role?: string }>({ type: 'BCS' });
-
-  // Spaced Memory database state
-  const [revisionItems, setRevisionItems] = useState<RevisionSchedule[]>([
-    {
-      id: "rev-1",
-      topic: "চর্যাপদ সাহিত্য প্রাচীন নিদর্শন",
-      subject: "Bangla Literature",
-      urgencyScore: 88,
-      retentionProbability: 35,
-      daysSinceLastReview: 6,
-      nextScheduledDate: "Overdue 2 days",
-      historyLength: 3
-    },
-    {
-      id: "rev-2",
-      topic: "Article 137 Public Service Commission formation",
-      subject: "Bangladesh Constitution",
-      urgencyScore: 68,
-      retentionProbability: 51,
-      daysSinceLastReview: 4,
-      nextScheduledDate: "Review today",
-      historyLength: 2
-    },
-    {
-      id: "rev-3",
-      topic: "Simple Interest Equations",
-      subject: "Mathematical Reasoning",
-      urgencyScore: 35,
-      retentionProbability: 82,
-      daysSinceLastReview: 1,
-      nextScheduledDate: "In 4 Days",
-      historyLength: 5
-    }
-  ]);
-
-  // Upcoming Government Career Circulars and countdown deadlines
+  // Static public BPSC circulars (not user-specific — sourced from BPSC public data)
   const upcomingCirculars: Circular[] = [
     {
-      id: "cir-1",
-      title: "46th BCS General Pre-Selection Circular",
-      organization: "Bangladesh Public Service Commission (BPSC)",
+      id: 'cir-bpsc-46',
+      title: '46th BCS General Pre-Selection Circular',
+      organization: 'Bangladesh Public Service Commission (BPSC)',
       vacancyCount: 3105,
-      deadline: "June 15, 2026",
-      admitCardDate: "August 20, 2026",
-      countdownDays: 24,
-      link: "https://bpsc.teletalk.com.bd",
+      deadline: 'June 15, 2026',
+      admitCardDate: 'August 20, 2026',
+      countdownDays: Math.max(0, Math.ceil((new Date('2026-06-15').getTime() - Date.now()) / 86400000)),
+      link: 'https://bpsc.teletalk.com.bd',
       syllabusOverview: [
-        "Language & Comp (35 Marks): Phonetics, parts of speech, syntax and spellings.",
-        "Bangla Literature Studies (35 Marks): Ancient period manuscripts, medieval poet laureates, and modern masterpieces.",
-        "Mathematical and Numerical parameters (30 Marks): Simple interest, sets, algebra, geometry and analytical reasoning tests."
-      ]
+        'Language & Comp (35 Marks): Phonetics, parts of speech, syntax.',
+        'Bangla Literature (35 Marks): Ancient to modern literary works.',
+        'Mathematical Reasoning (30 Marks): Algebra, geometry, analytical tests.',
+      ],
     },
     {
-      id: "cir-2",
-      title: "Dhaka University 'A' Unit Admissions 2026",
-      organization: "University of Dhaka Co-alignment",
-      vacancyCount: 1850,
-      deadline: "July 20, 2026",
-      countdownDays: 59,
-      link: "https://du.ac.bd",
+      id: 'cir-bb-ad-2026',
+      title: 'Bangladesh Bank Assistant Director 2026',
+      organization: 'Bangladesh Bank',
+      vacancyCount: 100,
+      deadline: 'July 10, 2026',
+      countdownDays: Math.max(0, Math.ceil((new Date('2026-07-10').getTime() - Date.now()) / 86400000)),
+      link: 'https://erecruitment.bb.org.bd',
       syllabusOverview: [
-        "Physics objectives (30 Marks): Basic waves, thermodynamics, dynamics and fluid structures.",
-        "Mathematical calculus (30 Marks): Limits, differential equations and trigonometry.",
-        "Chemistry organic classifications (30 Marks): Alkanes, benzene rings and chemical bonds."
-      ]
-    }
+        'Economics & Banking (40 Marks): Monetary policy, financial instruments.',
+        'Mathematics & Analytical (30 Marks): Quantitative aptitude, data interpretation.',
+        'English (30 Marks): Comprehension, grammar, writing.',
+      ],
+    },
   ];
 
-  // Recharts high quality datasets for analytical heatmaps and metrics
-  const analyticsData: AnalyticsData = {
-    subjectMastery: [
-      { subject: 'Bangla Lit', score: 82, color: '#38bdf8' },
-      { subject: 'Constitution', score: 71, score2: 60, color: '#6366f1' },
-      { subject: 'Math Reasoning', score: 91, score2: 70, color: '#34d399' },
-      { subject: 'English Lit', score: 65, score2: 65, color: '#f59e0b' },
-      { subject: 'General Science', score: 85, score2: 75, color: '#a855f7' }
-    ],
-    rankHistory: [
-      { date: 'May 10', rank: 3670, percentile: 91.2 },
-      { date: 'May 12', rank: 2901, percentile: 93.5 },
-      { date: 'May 14', rank: 1840, percentile: 95.8 },
-      { date: 'May 16', rank: 1420, percentile: 96.9 },
-      { date: 'May 18', rank: 890, percentile: 98.1 },
-      { date: 'May 20', rank: 342, percentile: 99.2 }
-    ],
-    cognitiveFatigue: [
-      { hour: 1, fatigue: 10 },
-      { hour: 2, fatigue: 25 },
-      { hour: 3, fatigue: 45 },
-      { hour: 4, fatigue: 85 },
-      { hour: 5, fatigue: 92 }
-    ],
-    timePerQuestionTrend: [
-      { questionIndex: 1, actualSeconds: 12, averageSeconds: 35 },
-      { questionIndex: 2, actualSeconds: 42, averageSeconds: 40 },
-      { questionIndex: 3, actualSeconds: 15, averageSeconds: 30 },
-      { questionIndex: 4, actualSeconds: 28, averageSeconds: 35 },
-      { questionIndex: 5, actualSeconds: 31, averageSeconds: 35 }
-    ],
-    guessRateBySubject: [
-      { subject: 'Bangla Lit', rate: 12 },
-      { subject: 'Constitution', rate: 28 },
-      { subject: 'Math Reasoning', rate: 5 },
-      { subject: 'English Lit', rate: 42 }
-    ]
+  // Navigation state
+  const [currentView,         setCurrentView]         = useState<string>('landing');
+  const [activeTutorTopic,    setActiveTutorTopic]    = useState<string | undefined>(undefined);
+  const [selectedExamMode,    setSelectedExamMode]    = useState<{ type: 'BCS' | 'Bank' | 'Custom'; role?: string }>({ type: 'BCS' });
+  const [isMobileMenuOpen,    setIsMobileMenuOpen]    = useState<boolean>(false);
+
+  // React to Auth State Changes
+  const prevUserRef = useRef(user);
+  useEffect(() => {
+    if (user && !prevUserRef.current) {
+      setCurrentView('dashboard');
+    } else if (!user && prevUserRef.current) {
+      setCurrentView('landing');
+    }
+    prevUserRef.current = user;
+  }, [user]);
+
+  // Ensure authenticated user cannot access landing/onboarding marketing views
+  useEffect(() => {
+    if (user && (currentView === 'landing' || currentView === 'onboarding')) {
+      setCurrentView('dashboard');
+    }
+  }, [user, currentView]);
+
+  const handleSetCurrentView = (view: string) => {
+    let targetView = view;
+    if (view === 'revision') targetView = 'memory-revision';
+    if (view === 'career') targetView = 'career-os';
+
+    if (!user && targetView !== 'landing' && targetView !== 'onboarding') {
+      setIsAuthModalOpen(true);
+      setCurrentView('landing');
+      return;
+    }
+
+    setCurrentView(targetView);
   };
+
+  // Spaced memory state and other analytics data now loaded dynamically via useUserData()
 
   // Onboarding trigger
   const handleStartOnboarding = (exam: ExamType) => {
     setSelectedExamType(exam);
-    setAppPhase('onboarding');
+    handleSetCurrentView('onboarding');
     setOnboardStep(1);
   };
 
@@ -181,8 +134,7 @@ export default function App() {
       readinessScore: diagnosticScore || 78,
       predictedRank: diagnosticScore ? Math.max(100, 1500 - (diagnosticScore * 12)) : 342,
     });
-    setAppPhase('app');
-    setActiveTab('dashboard');
+    handleSetCurrentView('dashboard');
   };
 
   // Simulated diagnostic assessment MCQs on onboarding screen
@@ -208,437 +160,610 @@ export default function App() {
 
   const handleTriggerTutor = (subject: string, topic: string) => {
     setActiveTutorTopic(`${subject}: ${topic}`);
-    setActiveTab('tutor');
+    setCurrentView('tutor');
   };
 
-  const handleReviewCompletedInDatabase = (topicId: string, newRetention: number) => {
-    // Boost XP on memory recall success in Firestore
-    const nextXp = profile.xp + 250;
+  // When exam completes — save to Firestore, seed revision items from weak topics
+  const handleExamCompleted = async (results: {
+    score: number;
+    totalPossible: number;
+    accuracy: number;
+    percentile: number;
+    weakTopics: string[];
+    guessDetections: number;
+    confidenceLevel: string;
+  }) => {
+    if (!user) return;
+    try {
+      await saveExamSession(user.uid, {
+        examType:        profile.examType,
+        title:           `${profile.examType} Practice Session`,
+        score:           results.score,
+        totalPossible:   results.totalPossible,
+        accuracy:        results.accuracy,
+        percentile:      results.percentile ?? 50,
+        weakTopics:      results.weakTopics ?? [],
+        strongTopics:    [],
+        guessDetections: results.guessDetections ?? 0,
+        durationSeconds: 0,
+        completedAt:     Date.now(),
+      });
+      // Update predictedRank as well
+      const nextRank = results.percentile 
+        ? Math.max(12, Math.round((profile.predictedRank || 50000) * (1 - results.accuracy / 150))) 
+        : (profile.predictedRank || 50000);
+        
+      await updateUserProfile({
+        predictedRank: nextRank
+      });
+      // Seed weak topics into the revision queue
+      if ((results.weakTopics ?? []).length > 0) {
+        await seedRevisionItemsFromSession(user.uid, results.weakTopics, profile.examType);
+      }
+    } catch (err) {
+      console.error('[handleExamCompleted]', err);
+    }
+  };
+
+  // When a revision item is reviewed — update Firestore + award XP
+  const handleReviewCompletedInDatabase = async (topicId: string, newRetention: number) => {
+    if (!user) return;
+    const nextXp    = profile.xp + 250;
     const nextLevel = nextXp >= profile.level * 5000 ? profile.level + 1 : profile.level;
-    updateUserProfile({
-      xp: nextXp,
-      level: nextLevel
+    await updateUserProfile({ xp: nextXp, level: nextLevel });
+    await updateRevisionItem(user.uid, topicId, {
+      retentionProbability: newRetention,
+      daysSinceLastReview:  0,
+      urgencyScore:         Math.max(10, 100 - newRetention),
+      nextScheduledDate:    new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(),
     });
   };
 
-  return (
-    <div className="bg-slate-950 min-h-screen text-slate-100 selection:bg-cyan-500 selection:text-slate-900 border-none">
-      
-      {/* 1. LANDING LAYER */}
-      {appPhase === 'landing' && (
-        <LandingPage 
-          onStartOnboarding={handleStartOnboarding} 
-          user={user}
-          onOpenAuth={() => setIsAuthModalOpen(true)}
-          onGoToDashboard={() => setAppPhase('app')}
-        />
-      )}
+  const sidebarItems = [
+    { id: 'dashboard', label: t('Dashboard', 'ড্যাশবোর্ড'), icon: Target },
+    { id: 'exam-engine', label: t('Exam Engine', 'পরীক্ষা ইঞ্জিন'), icon: Brain },
+    { id: 'tutor', label: t('AI Tutor', 'এআই টিউটর'), icon: MessageSquare },
+    { id: 'written-evaluator', label: t('Written Evaluator', 'লিখিত মূল্যায়ন'), icon: FileText },
+    { id: 'analytics', label: t('Intel Analytics', 'মনস্তাত্ত্বিক গ্রাফ'), icon: BarChart },
+    { id: 'memory-revision', label: t('Memory Revision', 'মেমোরি রিভিশন'), icon: RefreshCw },
+    { id: 'career-os', label: t('Career OS', 'ক্যারিয়ার ওএস'), icon: Calendar },
+    { id: 'profile', label: t('Profile Identity', 'প্রোফাইল সেটিংস'), icon: User },
+  ];
 
-      {/* 2. ONBOARDING SEQUENCE */}
-      {appPhase === 'onboarding' && (
-        <div className="min-h-screen flex items-center justify-center p-6 bg-slate-950 font-sans">
-          
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-500 via-indigo-600 to-emerald-400"></div>
-
-          <div className="max-w-md w-full bg-slate-900 rounded-3xl border border-slate-800 p-8 space-y-6 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 blur-3xl pointer-events-none"></div>
-
-            <div className="flex items-center gap-2 justify-between border-b border-slate-800 pb-4">
-              <div className="flex items-center gap-2">
-                <Brain className="w-5 h-5 text-cyan-400 animate-pulse" />
-                <span className="text-sm font-bold tracking-wider font-mono">ONBOARDING PREPARATION</span>
-              </div>
-              <span className="text-xs text-slate-500">Step {onboardStep} of 3</span>
-            </div>
-
-            {/* Step 1: User Profile Details */}
-            {onboardStep === 1 && (
-              <div className="space-y-4">
-                <div className="space-y-1">
-                  <h3 className="text-lg font-bold">Personalize Learning Identity</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Set up your authentic metadata so that the BPSC simulated cohort ranking maps accurately.
-                  </p>
-                </div>
-
-                <div className="space-y-3 text-xs">
-                  <div className="space-y-1">
-                    <label className="text-slate-500 block uppercase font-mono font-bold">Aspirant Name</label>
-                    <input 
-                      type="text" 
-                      value={onboardName}
-                      onChange={(e) => setOnboardName(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-400 p-3 rounded-xl outline-none"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-slate-500 block uppercase font-mono font-bold">Mobile authentication number</label>
-                    <input 
-                      type="tel" 
-                      value={onboardPhone}
-                      onChange={(e) => setOnboardPhone(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-400 p-3 rounded-xl outline-none"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-slate-500 block uppercase font-mono font-bold">District / Division</label>
-                    <select 
-                      value={onboardDistrict}
-                      onChange={(e) => setOnboardDistrict(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-400 p-3 rounded-xl outline-none"
-                    >
-                      <option value="Dhaka">Dhaka Division</option>
-                      <option value="Mymensingh">Mymensingh Division</option>
-                      <option value="Chittagong">Chittagong Division</option>
-                      <option value="Rajshahi">Rajshahi Division</option>
-                      <option value="Sylhet">Sylhet Division</option>
-                    </select>
-                  </div>
-                </div>
-
-                <button 
-                  onClick={() => setOnboardStep(2)}
-                  className="w-full py-3 bg-cyan-400 text-slate-950 font-bold rounded-xl text-xs uppercase hover:bg-cyan-300 transition-all flex items-center justify-center gap-1"
-                >
-                  Continue to Diagnostic Assessment <ArrowRight className="w-4 h-4 text-slate-950" />
-                </button>
-              </div>
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-cyan-500 selection:text-slate-900">
+        <Navbar currentView={currentView} setCurrentView={handleSetCurrentView} onOpenAuth={() => setIsAuthModalOpen(true)} />
+        
+        <main className="grow flex flex-col">
+          <AnimatePresence mode="wait">
+            {currentView === 'landing' && (
+              <motion.div
+                key="landing"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="w-full min-h-screen pt-24 px-4 sm:px-6 lg:px-8 bg-slate-950 text-slate-100 max-w-7xl mx-auto overflow-x-hidden"
+              >
+                <LandingPage 
+                  onStartOnboarding={handleStartOnboarding} 
+                  user={user}
+                  onOpenAuth={() => setIsAuthModalOpen(true)}
+                  onGoToDashboard={() => handleSetCurrentView('dashboard')}
+                  onViewChange={handleSetCurrentView}
+                />
+              </motion.div>
             )}
 
-            {/* Step 2: Adaptive 1 MCQ Diagnostic */}
-            {onboardStep === 2 && (
-              <div className="space-y-4">
-                <div className="space-y-1.5">
-                  <span className="text-[9px] bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded border border-cyan-800/20 font-mono tracking-widest font-bold inline-block">
-                    AI READINESS ASSESSMENT TRIAL
-                  </span>
-                  <h3 className="text-base font-bold text-white">Quick Onboard Validation Question</h3>
-                  <p className="text-xs text-slate-400 leading-normal">
-                    Answer this sample question to approximate your starting national ranking.
-                  </p>
-                </div>
+            {currentView === 'onboarding' && (
+              <motion.div
+                key="onboarding"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="w-full min-h-screen pt-24 px-4 sm:px-6 lg:px-8 bg-slate-950 text-slate-100 max-w-7xl mx-auto overflow-x-hidden"
+              >
+                <div className="flex items-center justify-center p-6 bg-slate-950 font-sans">
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-500 via-indigo-600 to-emerald-400"></div>
 
-                <div className="p-4 bg-slate-950 border border-slate-850 rounded-2xl text-xs font-sans leading-relaxed text-slate-200">
-                  {dummyDiagnosticMcq.text}
-                </div>
+                  <div className="max-w-md w-full bg-slate-900 rounded-3xl border border-slate-800 p-8 space-y-6 shadow-2xl relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 blur-3xl pointer-events-none"></div>
 
-                <div className="grid grid-cols-1 gap-2.5 text-xs text-slate-300">
-                  {dummyDiagnosticMcq.options.map((opt, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => selectDiagnosticOption(idx)}
-                      className="p-3 bg-slate-950 hover:bg-slate-800 border border-slate-850 hover:border-cyan-400/50 rounded-xl text-left font-sans"
-                    >
-                      {idx + 1}. {opt}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Step 3: Predictive Result and Dashboard sync */}
-            {onboardStep === 3 && (
-              <div className="space-y-5 text-center">
-                <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-xl animate-bounce">
-                  ✓
-                </div>
-
-                <div className="space-y-1">
-                  <h3 className="text-lg font-bold">Onboarding Complete</h3>
-                  <p className="text-xs text-slate-400">
-                    We've approximated your starting preparation health score based on national competitive data.
-                  </p>
-                </div>
-
-                <div className="p-4 bg-slate-950 rounded-xl border border-slate-850 grid grid-cols-2 gap-4">
-                  <div>
-                    <span className="text-[10px] text-slate-500 uppercase block font-mono">Aggressed Score</span>
-                    <span className="text-xl font-mono font-bold text-cyan-400">{diagnosticScore}%</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-slate-500 uppercase block font-mono">Apprx Rank Bound</span>
-                    <span className="text-xl font-mono font-bold text-rose-300">
-                      #{diagnosticScore === 85 ? '12,500' : '45,210'}
-                    </span>
-                  </div>
-                </div>
-
-                <button 
-                  onClick={handleFinishOnboarding}
-                  className="w-full py-3 bg-gradient-to-r from-cyan-400 to-indigo-500 text-slate-950 font-bold rounded-xl text-xs uppercase flex items-center justify-center gap-1 hover:scale-[1.01] transition-transform"
-                >
-                  Confirm and Launch Dashboard <ArrowRight className="w-4 h-4 text-slate-950" />
-                </button>
-              </div>
-            )}
-
-          </div>
-
-        </div>
-      )}
-
-      {/* 3. CORE ADAPTIVE APP AREA */}
-      {appPhase === 'app' && (
-        <div className="min-h-screen flex flex-col md:flex-row font-sans">
-          
-          {/* Left Navigation Workspace Column Bar */}
-          <aside className="w-full md:w-64 bg-slate-900 border-r border-slate-850 p-6 flex flex-col justify-between flex-shrink-0">
-            <div className="space-y-8">
-              
-              {/* Logo */}
-              <div className="flex items-center gap-2">
-                <div className="p-2 bg-gradient-to-tr from-cyan-500 to-indigo-600 rounded-xl">
-                  <Sparkles className="w-5 h-5 text-slate-950" />
-                </div>
-                <div>
-                  <span className="text-md font-bold tracking-tight bg-gradient-to-r from-white to-cyan-400 bg-clip-text text-transparent">
-                    RANKFLOW <span className="text-cyan-400 font-mono text-xs">AI</span>
-                  </span>
-                  <p className="text-[9px] text-slate-500 leading-none">Learning OS</p>
-                </div>
-              </div>
-
-              {/* Navigation buttons */}
-              <nav className="space-y-1.5 font-sans text-xs">
-                {/* AI Dashboard */}
-                <button
-                  onClick={() => {
-                    setActiveTab('dashboard');
-                    setActiveTutorTopic(undefined);
-                  }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-colors text-left ${
-                    activeTab === 'dashboard'
-                      ? 'bg-gradient-to-r from-cyan-500/10 to-indigo-600/10 text-cyan-400 border border-cyan-500/15' 
-                      : 'text-slate-400 hover:text-slate-200 border border-transparent'
-                  }`}
-                >
-                  <Brain className={`w-4 h-4 ${activeTab === 'dashboard' ? 'text-cyan-400' : 'text-slate-400'}`} />
-                  <span>AI Dashboard</span>
-                </button>
-
-                {/* Collapsible Exam Engine */}
-                <div className="space-y-1">
-                  <button
-                    onClick={() => {
-                      setIsExamEngineExpanded(!isExamEngineExpanded);
-                      setActiveTab('exam_engine_bcs');
-                      setSelectedExamMode({ type: 'BCS' });
-                    }}
-                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold transition-colors text-left ${
-                      activeTab.startsWith('exam_engine')
-                        ? 'bg-gradient-to-r from-cyan-500/10 to-indigo-600/10 text-cyan-450 border border-cyan-500/15'
-                        : 'text-slate-400 hover:text-slate-200 border border-transparent'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 font-bold">
-                      <Target className={`w-4 h-4 ${activeTab.startsWith('exam_engine') ? 'text-cyan-400' : 'text-slate-400'}`} />
-                      <span>Exam Engine</span>
+                    <div className="flex items-center gap-2 justify-between border-b border-slate-800 pb-4">
+                      <div className="flex items-center gap-2">
+                        <Brain className="w-5 h-5 text-cyan-400 animate-pulse" />
+                        <span className="text-sm font-bold tracking-wider font-mono">ONBOARDING PREPARATION</span>
+                      </div>
+                      <span className="text-xs text-slate-500">Step {onboardStep} of 3</span>
                     </div>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isExamEngineExpanded ? 'transform rotate-180 text-cyan-405' : 'text-slate-500'}`} />
-                  </button>
 
-                  {isExamEngineExpanded && (
-                    <div className="pl-3 pr-1 py-1 space-y-1 bg-slate-950/40 rounded-xl border border-slate-850/50 m-1 flex flex-col">
-                      <button
-                        onClick={() => {
-                          setActiveTab('exam_engine_bcs');
-                          setSelectedExamMode({ type: 'BCS' });
-                        }}
-                        className={`py-2 px-2.5 text-[10px] rounded-lg transition-all text-left flex items-center gap-2 font-bold ${
-                          activeTab === 'exam_engine_bcs'
-                            ? 'text-cyan-400 bg-cyan-950/20 font-bold animate-pulse'
-                            : 'text-slate-400 hover:text-slate-200'
-                        }`}
-                      >
-                        <Sparkles className="w-3 h-3 text-cyan-400 animate-spin" />
-                        <span>BCS Preliminary</span>
-                      </button>
-
-                      <div className="py-1">
-                        <div className="px-2.5 py-1 text-[9px] uppercase font-bold text-slate-550 tracking-wider">
-                          Bangladesh Bank
+                    {/* Step 1: User Profile Details */}
+                    {onboardStep === 1 && (
+                      <div className="space-y-4">
+                        <div className="space-y-1">
+                          <h3 className="text-lg font-bold">Personalize Learning Identity</h3>
+                          <p className="text-xs text-slate-400 leading-relaxed">
+                            Set up your authentic metadata so that the BPSC simulated cohort ranking maps accurately.
+                          </p>
                         </div>
-                        <div className="pl-2 py-0.5 border-l border-slate-800 m-1 flex flex-col gap-1">
-                          {[
-                            { id: 'ad', label: 'Assistant Director (AD)' },
-                            { id: 'senior_officer', label: 'Senior Officer' },
-                            { id: 'general_officer', label: 'General Officer' },
-                            { id: 'officer_cash', label: 'Officer (Cash)' },
-                            { id: 'other_9th_grade', label: 'Other 9th Grade Posts' }
-                          ].map((role) => (
-                            <button
-                              key={role.id}
-                              onClick={() => {
-                                setActiveTab(`exam_engine_bank_${role.id}`);
-                                setSelectedExamMode({ type: 'Bank', role: role.label });
-                              }}
-                              className={`w-full py-1 px-2 text-[10px] rounded text-left block truncate transition-all ${
-                                activeTab === `exam_engine_bank_${role.id}`
-                                  ? 'text-emerald-400 font-extrabold bg-emerald-950/25 border-l border-emerald-500'
-                                  : 'text-slate-400 hover:text-slate-200'
-                              }`}
-                              title={role.label}
+
+                        <div className="space-y-3 text-xs">
+                          <div className="space-y-1">
+                            <label className="text-slate-500 block uppercase font-mono font-bold">Aspirant Name</label>
+                            <input 
+                              type="text" 
+                              value={onboardName}
+                              onChange={(e) => setOnboardName(e.target.value)}
+                              className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-400 p-3 rounded-xl outline-none text-white"
+                            />
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="text-slate-500 block uppercase font-mono font-bold">Mobile authentication number</label>
+                            <input 
+                              type="tel" 
+                              value={onboardPhone}
+                              onChange={(e) => setOnboardPhone(e.target.value)}
+                              className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-400 p-3 rounded-xl outline-none text-white"
+                            />
+                          </div>
+
+                          <div className="space-y-1">
+                            <label className="text-slate-500 block uppercase font-mono font-bold">District / Division</label>
+                            <select 
+                              value={onboardDistrict}
+                              onChange={(e) => setOnboardDistrict(e.target.value)}
+                              className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-400 p-3 rounded-xl outline-none text-white"
                             >
-                              • {role.label}
+                              <option value="Dhaka">Dhaka Division</option>
+                              <option value="Mymensingh">Mymensingh Division</option>
+                              <option value="Chittagong">Chittagong Division</option>
+                              <option value="Rajshahi">Rajshahi Division</option>
+                              <option value="Sylhet">Sylhet Division</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <button 
+                          onClick={() => setOnboardStep(2)}
+                          className="w-full py-3 bg-cyan-400 text-slate-950 font-bold rounded-xl text-xs uppercase hover:bg-cyan-300 transition-all flex items-center justify-center gap-1"
+                        >
+                          Continue to Diagnostic Assessment <ArrowRight className="w-4 h-4 text-slate-950" />
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Step 2: Adaptive 1 MCQ Diagnostic */}
+                    {onboardStep === 2 && (
+                      <div className="space-y-4">
+                        <div className="space-y-1.5">
+                          <span className="text-[9px] bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded border border-cyan-800/20 font-mono tracking-widest font-bold inline-block">
+                            AI READINESS ASSESSMENT TRIAL
+                          </span>
+                          <h3 className="text-base font-bold text-white">Quick Onboard Validation Question</h3>
+                          <p className="text-xs text-slate-400 leading-normal">
+                            Answer this sample question to approximate your starting national ranking.
+                          </p>
+                        </div>
+
+                        <div className="p-4 bg-slate-950 border border-slate-850 rounded-2xl text-xs font-sans leading-relaxed text-slate-200">
+                          {dummyDiagnosticMcq.text}
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-2.5 text-xs text-slate-300">
+                          {dummyDiagnosticMcq.options.map((opt, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => selectDiagnosticOption(idx)}
+                              className="p-3 bg-slate-950 hover:bg-slate-800 border border-slate-850 hover:border-cyan-400/50 rounded-xl text-left font-sans text-white"
+                            >
+                              {idx + 1}. {opt}
                             </button>
                           ))}
                         </div>
                       </div>
+                    )}
 
-                      <button
-                        onClick={() => {
-                          setActiveTab('exam_engine_custom');
-                          setSelectedExamMode({ type: 'Custom' });
-                        }}
-                        className={`py-2 px-2.5 text-[10px] rounded-lg transition-all text-left flex items-center gap-2 font-bold ${
-                          activeTab === 'exam_engine_custom'
-                            ? 'text-purple-400 bg-purple-950/20 font-bold'
-                            : 'text-slate-400 hover:text-slate-200'
-                        }`}
-                      >
-                        <RefreshCw className="w-3 h-3 text-purple-400" />
-                        <span>Custom Exam Builder</span>
-                      </button>
-                    </div>
-                  )}
+                    {/* Step 3: Predictive Result and Dashboard sync */}
+                    {onboardStep === 3 && (
+                      <div className="space-y-5 text-center">
+                        <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-xl animate-bounce">
+                          ✓
+                        </div>
+
+                        <div className="space-y-1">
+                          <h3 className="text-lg font-bold">Onboarding Complete</h3>
+                          <p className="text-xs text-slate-400">
+                            We've approximated your starting preparation health score based on national competitive data.
+                          </p>
+                        </div>
+
+                        <div className="p-4 bg-slate-950 rounded-xl border border-slate-850 grid grid-cols-2 gap-4">
+                          <div>
+                            <span className="text-[10px] text-slate-500 uppercase block font-mono">Aggressed Score</span>
+                            <span className="text-xl font-mono font-bold text-cyan-400">{diagnosticScore}%</span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-500 uppercase block font-mono">Apprx Rank Bound</span>
+                            <span className="text-xl font-mono font-bold text-rose-300">
+                              #{diagnosticScore === 85 ? '12,500' : '45,210'}
+                            </span>
+                          </div>
+                        </div>
+
+                        <button 
+                          onClick={handleFinishOnboarding}
+                          className="w-full py-3 bg-gradient-to-r from-cyan-400 to-indigo-500 text-slate-950 font-bold rounded-xl text-xs uppercase flex items-center justify-center gap-1 hover:scale-[1.01] transition-transform"
+                        >
+                          Confirm and Launch Dashboard <ArrowRight className="w-4 h-4 text-slate-950" />
+                        </button>
+                      </div>
+                    )}
+
+                  </div>
+
                 </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </main>
 
-                {/* Rest of items */}
-                {[
-                  { id: 'tutor', label: 'Conversational Tutor', icon: MessageSquare },
-                  { id: 'written', label: 'Written Evaluator', icon: FileText },
-                  { id: 'analytics', label: 'Intel Analytics', icon: BarChart },
-                  { id: 'revision', label: 'Spaced Memory', icon: RefreshCw },
-                  { id: 'career', label: 'Job Registry', icon: Calendar },
-                  { id: 'profile', label: 'My Learner Archetype', icon: UserCheck },
-                ].map((tab) => {
-                  const IconComponent = tab.icon;
-                  const isActive = activeTab === tab.id;
-                  return (
+        <Footer activeTab={currentView} setActiveTab={handleSetCurrentView} />
+
+        <AuthModal 
+          isOpen={isAuthModalOpen} 
+          onClose={() => setIsAuthModalOpen(false)} 
+          onSuccess={() => setIsAuthModalOpen(false)} 
+        />
+      </div>
+    );
+  }
+
+  // Authenticated Application Shell
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row font-sans selection:bg-cyan-500 selection:text-slate-900">
+      
+      {/* Mobile Top Header */}
+      <div className="md:hidden sticky top-0 z-40 w-full flex items-center justify-between p-4 bg-slate-900 border-b border-slate-800 backdrop-blur-md">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleSetCurrentView('dashboard')}>
+          <div className="p-1.5 bg-gradient-to-tr from-cyan-500 to-indigo-650 rounded-lg">
+            <Sparkles className="w-4 h-4 text-slate-950" />
+          </div>
+          <span className="font-bold tracking-tight text-white text-sm">{t('RankFlow AI', 'র‍্যাঙ্কফ্লো এআই')}</span>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          {/* Mobile language switch */}
+          <button 
+            onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
+            className="flex items-center gap-1.5 px-2 py-1 rounded-lg border border-slate-800 text-[10px] font-bold text-slate-400 hover:text-cyan-400 bg-slate-950/40 cursor-pointer"
+          >
+            <Globe className="w-3.5 h-3.5" />
+            <span>{language === 'en' ? 'EN' : 'বাংলা'}</span>
+          </button>
+          
+          <span className="text-[10px] text-yellow-500 font-mono">
+            💧 {profile?.streak || 0} Streak
+          </span>
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+          >
+            {isMobileMenuOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Desktop Sticky Left Sidebar */}
+      <aside className="hidden md:flex flex-col justify-between w-64 border-r border-slate-800 bg-slate-900/50 backdrop-blur-md h-screen sticky top-0 shrink-0">
+        <div>
+          {/* Logo / Title */}
+          <div className="p-6 border-b border-slate-800 flex items-center gap-3">
+            <div className="p-1.5 bg-gradient-to-tr from-cyan-500 to-indigo-650 rounded-lg">
+              <Sparkles className="w-5 h-5 text-slate-950 animate-pulse" />
+            </div>
+            <span className="font-extrabold tracking-tight text-white text-base flex flex-col">
+              <span>{t('RankFlow AI', 'র‍্যাঙ্কফ্লো এআই')}</span>
+              <span className="text-[10px] text-cyan-400 font-medium font-sans">{t('BCS & Bank AD OS', 'বিসিএস ও ব্যাংক এডি ওএস')}</span>
+            </span>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="py-6 px-4 space-y-1 overflow-y-auto">
+            {sidebarItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleSetCurrentView(item.id)}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold cursor-pointer transition-all ${
+                  currentView === item.id
+                    ? 'text-cyan-400 bg-cyan-500/10 border-l-2 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.05)]'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                }`}
+              >
+                <item.icon className={`w-4 h-4 ${currentView === item.id ? 'text-cyan-400' : 'text-slate-500'}`} />
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom Profile Summary & Language Toggle */}
+        <div className="p-4 border-t border-slate-800 bg-slate-950/40 space-y-3">
+          <button 
+            onClick={() => handleSetCurrentView('profile')}
+            className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-slate-900 transition-colors text-left group"
+          >
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-cyan-500 flex items-center justify-center text-xs font-bold text-white shadow-inner group-hover:scale-105 transition-transform">
+              <User className="w-4 h-4 text-slate-100" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="text-xs font-semibold block text-slate-200 truncate group-hover:text-cyan-400 transition-colors">
+                {profile?.name || 'Profile'}
+              </span>
+              <span className="text-[10px] text-emerald-400 font-mono block">💧 {profile?.streak || 0} Streak</span>
+            </div>
+          </button>
+          
+          <div className="flex gap-2">
+            <button 
+              onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 border border-slate-850 bg-slate-950 text-[10px] font-bold text-slate-450 hover:text-cyan-400 rounded-xl transition-colors cursor-pointer"
+              title={t('Switch Language', 'ভাষা পরিবর্তন')}
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>{language === 'en' ? 'EN' : 'বাংলা'}</span>
+            </button>
+            <button 
+              onClick={() => signOutUser()}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 text-[10px] font-bold text-slate-450 hover:text-rose-400 rounded-xl hover:bg-rose-950/20 border border-transparent hover:border-rose-900/30 transition-all cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>{t('Log Out', 'লগ আউট')}</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile Drawer (Overlay) */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black z-40 md:hidden"
+            />
+            <motion.aside
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 20, stiffness: 200 }}
+              className="fixed top-0 bottom-0 left-0 w-64 bg-slate-900 border-r border-slate-800 z-50 flex flex-col justify-between h-screen md:hidden"
+            >
+              <div>
+                <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-gradient-to-tr from-cyan-500 to-indigo-650 rounded-lg">
+                      <Sparkles className="w-4 h-4 text-slate-950" />
+                    </div>
+                    <span className="font-extrabold text-white text-sm">{t('RankFlow AI', 'র‍্যাঙ্কফ্লো এআই')}</span>
+                  </div>
+                  <button 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-850"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                
+                <div className="py-4 px-3 space-y-1 overflow-y-auto">
+                  {sidebarItems.map((item) => (
                     <button
-                      key={tab.id}
+                      key={item.id}
                       onClick={() => {
-                        setActiveTab(tab.id);
-                        if (tab.id !== 'tutor') {
-                          setActiveTutorTopic(undefined);
-                        }
+                        handleSetCurrentView(item.id);
+                        setIsMobileMenuOpen(false);
                       }}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-colors text-left ${
-                        isActive 
-                          ? 'bg-gradient-to-r from-cyan-500/10 to-indigo-600/10 text-cyan-400 border border-cyan-500/15' 
-                          : 'text-slate-400 hover:text-slate-200 border border-transparent'
+                      className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold cursor-pointer transition-all ${
+                        currentView === item.id
+                          ? 'text-cyan-400 bg-cyan-500/10 border-l-2 border-cyan-400'
+                          : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850/40'
                       }`}
                     >
-                      <IconComponent className={`w-4 h-4 ${isActive ? 'text-cyan-400' : 'text-slate-400'}`} />
-                      <span>{tab.label}</span>
+                      <item.icon className={`w-4 h-4 ${currentView === item.id ? 'text-cyan-400' : 'text-slate-500'}`} />
+                      <span>{item.label}</span>
                     </button>
-                  );
-                })}
-              </nav>
-
-            </div>
-
-            {/* Logout / Reset section bottom and indicator */}
-            <div className="space-y-4 pt-6 border-t border-slate-800">
-              <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-xs font-bold font-sans">
-                  {profile.name.substring(0, 2).toUpperCase()}
-                </div>
-                <div className="truncate text-xs">
-                  <span className="font-semibold block text-slate-200 truncate">{profile.name}</span>
-                  <span className="text-[10px] text-emerald-400 block font-mono">💧 {profile.streak} Days active</span>
+                  ))}
                 </div>
               </div>
 
-              <button 
-                onClick={() => signOutUser()}
-                className="w-full flex items-center gap-2 px-3 py-2 text-rose-400 hover:text-white rounded-lg hover:bg-rose-950/20 text-xs transition-colors cursor-pointer"
-              >
-                <LogOut className="w-3.5 h-3.5" /> Log Out (লগআউট)
-              </button>
-            </div>
+              <div className="p-4 border-t border-slate-800 bg-slate-950/40 space-y-3">
+                <button 
+                  onClick={() => {
+                    handleSetCurrentView('profile');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-slate-900 transition-colors text-left"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-cyan-500 flex items-center justify-center text-xs font-bold text-white shadow-inner">
+                    <User className="w-4 h-4 text-slate-100" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-xs font-semibold block text-slate-200 truncate">
+                      {profile?.name || 'Profile'}
+                    </span>
+                    <span className="text-[10px] text-emerald-400 font-mono block">💧 {profile?.streak || 0} Streak</span>
+                  </div>
+                </button>
+                
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => {
+                      setLanguage(language === 'en' ? 'bn' : 'en');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 border border-slate-800 bg-slate-950 text-xs font-bold text-slate-400 hover:text-cyan-400 rounded-xl transition-colors cursor-pointer"
+                  >
+                    <Globe className="w-3.5 h-3.5" />
+                    <span>{language === 'en' ? 'EN' : 'বাংলা'}</span>
+                  </button>
+                  <button 
+                    onClick={() => {
+                      signOutUser();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-slate-405 hover:text-rose-400 rounded-xl hover:bg-rose-950/20 border border-transparent hover:border-rose-900/30 transition-all cursor-pointer"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span>{t('Log Out', 'লগ আউট')}</span>
+                  </button>
+                </div>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
-          </aside>
-
-          {/* Right Main Panel Body section container */}
-          <main className="flex-1 bg-slate-950/50 p-6 md:p-8 overflow-y-auto max-w-7xl">
-            
-            {/* Conditional Sub-panels render block */}
-            {activeTab === 'dashboard' && (
+      {/* Workspace Main Area */}
+      <main className="flex-1 min-h-screen p-4 md:p-8 overflow-y-auto w-full max-w-7xl mx-auto md:max-w-none">
+        <AnimatePresence mode="wait">
+          {currentView === 'dashboard' && (
+            <motion.div
+              key="dashboard"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="w-full min-h-full font-sans animate-none"
+            >
               <Dashboard 
                 profile={profile} 
                 revisionItems={revisionItems}
+                examSessions={examSessions}
                 upcomingCirculars={upcomingCirculars}
-                onNavigate={(tab) => setActiveTab(tab)}
+                onNavigate={handleSetCurrentView}
                 onQuickPractice={() => {
-                  setActiveTab('exam_engine_bcs');
+                  handleSetCurrentView('exam-engine');
                   setSelectedExamMode({ type: 'BCS' });
                 }}
               />
-            )}
+            </motion.div>
+          )}
 
-            {/* MCQ practice engine route */}
-            {activeTab.startsWith('exam_engine') && (
+          {currentView === 'exam-engine' && (
+            <motion.div
+              key="exam-engine"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="w-full min-h-full font-sans animate-none"
+            >
               <ExamEngine 
                 examType={profile.examType}
                 selectedExamMode={selectedExamMode}
-                onExamCompleted={(results) => {
-                  updateUserProfile({
-                    readinessScore: results.accuracy,
-                    predictedRank: results.percentile ? Math.max(12, Math.round(profile.predictedRank * (1 - results.accuracy/150))) : profile.predictedRank,
-                    passingProbability: Math.min(99, Math.round(results.accuracy * 0.95 + 10))
-                  });
-                }}
+                onExamCompleted={handleExamCompleted}
                 onTriggerTutor={handleTriggerTutor}
               />
-            )}
+            </motion.div>
+          )}
 
-            {/* Tutor chatbot interface panel */}
-            {activeTab === 'tutor' && (
+          {currentView === 'tutor' && (
+            <motion.div
+              key="tutor"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="w-full min-h-full font-sans animate-none"
+            >
               <AITutor examType={profile.examType} initialTopic={activeTutorTopic} />
-            )}
+            </motion.div>
+          )}
 
-            {/* Written Assessment Evaluator */}
-            {activeTab === 'written' && (
+          {currentView === 'written-evaluator' && (
+            <motion.div
+              key="written-evaluator"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="w-full min-h-full font-sans animate-none"
+            >
               <WrittenEvaluator />
-            )}
+            </motion.div>
+          )}
 
-            {/* Intel analytics charts dashboards */}
-            {activeTab === 'analytics' && (
-              <Analytics analyticsData={analyticsData} profile={profile} />
-            )}
+          {currentView === 'analytics' && (
+            <motion.div
+              key="analytics"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="w-full min-h-full font-sans animate-none"
+            >
+              <Analytics analyticsData={analyticsData} profile={profile} analyticsSummary={analyticsSummary} onNavigate={handleSetCurrentView} />
+            </motion.div>
+          )}
 
-            {/* Memory and Spaced Repetition listings */}
-            {activeTab === 'revision' && (
+          {currentView === 'memory-revision' && (
+            <motion.div
+              key="memory-revision"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="w-full min-h-full font-sans animate-none"
+            >
               <MemoryRevision 
-                initialItems={revisionItems} 
+                items={revisionItems} 
                 onReviewCompleted={handleReviewCompletedInDatabase} 
               />
-            )}
+            </motion.div>
+          )}
 
-            {/* Gov circular countdown tracking calendars */}
-            {activeTab === 'career' && (
+          {currentView === 'career-os' && (
+            <motion.div
+              key="career-os"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="w-full min-h-full font-sans animate-none"
+            >
               <CareerOS circulars={upcomingCirculars} />
-            )}
+            </motion.div>
+          )}
 
-            {/* User profile archetype identity overview */}
-            {activeTab === 'profile' && (
+          {currentView === 'profile' && (
+            <motion.div
+              key="profile"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="w-full min-h-full font-sans animate-none"
+            >
               <ProfileIdentity profile={profile} />
-            )}
-
-          </main>
-
-        </div>
-      )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
 
       <AuthModal 
         isOpen={isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)} 
         onSuccess={() => setIsAuthModalOpen(false)} 
       />
-
     </div>
   );
 }

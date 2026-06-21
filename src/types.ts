@@ -1,21 +1,35 @@
-export type ExamType = 'BCS' | 'Admission' | 'SSC' | 'HSC';
+export type ExamType = 'BCS' | 'BankAD' | 'SeniorOfficer' | 'GovtJob';
 
 export interface UserProfile {
+  // ── Identity (synced from Firebase Auth) ──────────────────────────────────
+  uid?: string;
+  email?: string;
+  photoURL?: string | null;
+  provider?: 'google' | 'email' | 'anonymous';  // auth provider type
+
+  // ── Exam profile ──────────────────────────────────────────────────────────
   name: string;
   phone: string;
   examType: ExamType;
   targetYear: number;
+  district: string;
+  archetype: string;
+
+  // ── Gamification & performance ────────────────────────────────────────────
   streak: number;
   xp: number;
   level: number;
   learningStyle: 'visual' | 'analytical' | 'verbal' | 'interactive';
-  readinessScore: number; // 0 to 100
+  readinessScore: number;      // 0 – 100
   predictedRank: number;
   totalStudents: number;
-  passingProbability: number; // 0 to 100
-  consistencyScore: number; // 0 to 100
-  district: string;
-  archetype: string; // e.g., "Analytical Strategist", "Persistent Reviewer"
+  passingProbability: number;  // 0 – 100
+  consistencyScore: number;    // 0 – 100
+
+  // ── Audit / scalability ───────────────────────────────────────────────────
+  createdAt?: number;          // Unix ms — immutable, set once
+  updatedAt?: number;          // Unix ms — updated on every write
+  lastLoginAt?: number;        // Unix ms — updated on every login
 }
 
 export interface Question {

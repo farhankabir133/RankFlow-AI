@@ -6,12 +6,11 @@ import {
 import { RevisionSchedule } from '../types';
 
 interface MemoryRevisionProps {
-  initialItems: RevisionSchedule[];
+  items: RevisionSchedule[];
   onReviewCompleted: (topicId: string, newRetention: number) => void;
 }
 
-export default function MemoryRevision({ initialItems, onReviewCompleted }: MemoryRevisionProps) {
-  const [items, setItems] = useState<RevisionSchedule[]>(initialItems);
+export default function MemoryRevision({ items, onReviewCompleted }: MemoryRevisionProps) {
   const [reviewingItem, setReviewingItem] = useState<RevisionSchedule | null>(null);
   const [sessionSuccess, setSessionSuccess] = useState<boolean>(false);
 
@@ -25,21 +24,7 @@ export default function MemoryRevision({ initialItems, onReviewCompleted }: Memo
     
     // Simulate updating retention index following memory recall effort
     const newRetention = Math.min(100, Math.round(reviewingItem.retentionProbability + (25 * multiplier)));
-    const updatedItems = items.map(it => {
-      if (it.id === reviewingItem.id) {
-        return {
-          ...it,
-          urgencyScore: Math.max(10, Math.round(it.urgencyScore - (30 * multiplier))),
-          retentionProbability: newRetention,
-          daysSinceLastReview: 0,
-          historyLength: it.historyLength + 1,
-          nextScheduledDate: "In 4 Days"
-        };
-      }
-      return it;
-    });
-
-    setItems(updatedItems);
+    
     onReviewCompleted(reviewingItem.id, newRetention);
     setSessionSuccess(true);
     setTimeout(() => {
@@ -68,11 +53,17 @@ export default function MemoryRevision({ initialItems, onReviewCompleted }: Memo
         <div className="pt-2 border-t border-slate-800/60 grid grid-cols-2 sm:grid-cols-3 gap-6">
           <div className="space-y-1">
             <span className="text-[10px] text-slate-500 uppercase font-mono">Global Health Index</span>
-            <span className="text-lg font-mono font-bold block text-cyan-400">79.4% Stability</span>
+            <span className="text-lg font-mono font-bold block text-cyan-400">
+              {items.length > 0 
+                ? `${Math.round(items.reduce((sum, item) => sum + item.retentionProbability, 0) / items.length)}% Stability`
+                : '100% Stability'}
+            </span>
           </div>
           <div className="space-y-1">
             <span className="text-[10px] text-slate-500 uppercase font-mono">Active Forgetting Risk</span>
-            <span className="text-lg font-mono font-bold block text-rose-400">2 Subjects Expired</span>
+            <span className="text-lg font-mono font-bold block text-rose-400">
+              {items.filter(item => item.urgencyScore > 60).length} Subjects Expired
+            </span>
           </div>
           <div className="space-y-1">
             <span className="text-[10px] text-slate-500 uppercase font-mono">Spaced Interval Tier</span>
@@ -160,49 +151,61 @@ export default function MemoryRevision({ initialItems, onReviewCompleted }: Memo
             </div>
 
             <div className="space-y-2.5">
-              {items.map((item) => {
-                const isUrgent = item.urgencyScore > 50;
-                return (
-                  <div 
-                    key={item.id}
-                    className={`p-3.5 rounded-xl border flex items-center justify-between gap-4 transition-all ${
-                      isUrgent ? 'bg-slate-950/90 border-rose-500/20' : 'bg-slate-950/40 border-slate-900 opacity-70'
-                    }`}
-                  >
-                    <div className="space-y-1 select-none flex-1 truncate">
-                      <div className="flex items-center gap-1.5 truncate">
-                        <span className={`w-2 h-2 rounded-full ${isUrgent ? 'bg-rose-400 animate-pulse' : 'bg-slate-700'}`} />
-                        <span className="text-xs font-semibold text-slate-200 truncate">{item.topic}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-[10px] text-slate-500 font-mono">
-                        <span>{item.subject}</span>
-                        <span>•</span>
-                        <span>{item.historyLength} recalls</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="text-right flex-shrink-0">
-                        <span className="text-[10px] text-slate-500 uppercase font-mono block">Retention</span>
-                        <span className={`text-xs font-mono font-bold ${item.retentionProbability > 70 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                          {item.retentionProbability}%
-                        </span>
+              {items && items.length > 0 ? (
+                items.map((item) => {
+                  const isUrgent = item.urgencyScore > 50;
+                  return (
+                    <div 
+                      key={item.id}
+                      className={`p-3.5 rounded-xl border flex items-center justify-between gap-4 transition-all ${
+                        isUrgent ? 'bg-slate-950/90 border-rose-500/20' : 'bg-slate-950/40 border-slate-900 opacity-70'
+                      }`}
+                    >
+                      <div className="space-y-1 select-none flex-1 truncate">
+                        <div className="flex items-center gap-1.5 truncate">
+                          <span className={`w-2 h-2 rounded-full ${isUrgent ? 'bg-rose-400 animate-pulse' : 'bg-slate-700'}`} />
+                          <span className="text-xs font-semibold text-slate-200 truncate">{item.topic}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-[10px] text-slate-500 font-mono">
+                          <span>{item.subject}</span>
+                          <span>•</span>
+                          <span>{item.historyLength} recalls</span>
+                        </div>
                       </div>
 
-                      <button
-                        onClick={() => handleStartReview(item)}
-                        className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-all flex items-center gap-0.5 ${
-                          isUrgent 
-                            ? 'bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-slate-950 border border-rose-500/20' 
-                            : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-white'
-                        }`}
-                      >
-                        Recall
-                      </button>
+                      <div className="flex items-center gap-3">
+                        <div className="text-right flex-shrink-0">
+                          <span className="text-[10px] text-slate-500 uppercase font-mono block">Retention</span>
+                          <span className={`text-xs font-mono font-bold ${item.retentionProbability > 70 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                            {item.retentionProbability}%
+                          </span>
+                        </div>
+
+                        <button
+                          onClick={() => handleStartReview(item)}
+                          className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-all flex items-center gap-0.5 ${
+                            isUrgent 
+                              ? 'bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-slate-950 border border-rose-500/20' 
+                              : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-white'
+                          }`}
+                        >
+                          Recall
+                        </button>
+                      </div>
                     </div>
+                  );
+                })
+              ) : (
+                <div className="flex flex-col items-center justify-center py-8 px-4 bg-slate-950/40 rounded-xl border border-dashed border-slate-800 text-center space-y-2">
+                  <Brain className="w-8 h-8 text-slate-700 mx-auto" />
+                  <div className="text-xs">
+                    <p className="font-semibold text-slate-400">Revision Queue Empty</p>
+                    <p className="text-[10px] text-slate-500 max-w-[200px] leading-normal mx-auto mt-0.5">
+                      Weak topics from mock exams will automatically seed here.
+                    </p>
                   </div>
-                );
-              })}
+                </div>
+              )}
             </div>
           </div>
 

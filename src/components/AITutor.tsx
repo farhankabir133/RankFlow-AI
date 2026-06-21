@@ -4,6 +4,7 @@ import {
   HelpCircle, CheckCircle2, Globe, Flame, RefreshCw, MessageCircle 
 } from 'lucide-react';
 import { Message, ExamType } from '../types';
+import { ApiClient } from '../lib/api';
 
 interface AITutorProps {
   examType: ExamType;
@@ -58,29 +59,26 @@ export default function AITutor({ examType, initialTopic }: AITutorProps) {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/ai/tutor', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: userMsg.text,
-          history: messages.slice(-6), // Send last 3 rounds
-          examType,
-          subject: subjectFilter
-        })
+      const result = await ApiClient.getTutorResponse({
+        message: userMsg.text,
+        history: messages
+          .filter(m => m.sender === 'user' || m.sender === 'ai')
+          .map(m => ({ sender: m.sender, text: m.text })),
+        examType,
+        subject: subjectFilter,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        setMessages(prev => [...prev, {
-          ...data,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }]);
-      } else {
-        throw new Error("Tutor backend offline or unconfigured");
-      }
+      setMessages(prev => [...prev, {
+        id: "ai-" + Math.random().toString(36).substring(7),
+        sender: "ai",
+        text: result.text,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        bilingual: result.bilingual,
+        stepByStep: result.stepByStep,
+        conceptDecomposition: result.conceptDecomposition,
+      }]);
     } catch (err) {
       console.error("AI Tutor call failed, loading fallback...", err);
-      // Fallback message
       setTimeout(() => {
         setMessages(prev => [...prev, {
           id: "fallback-" + Math.random(),

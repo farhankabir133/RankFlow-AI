@@ -1,58 +1,54 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Catch-all Default-Deny Security rule
-    match /{document=**} {
-      allow read, write: if false;
-    }
 
-    // Common helper functions
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
-    }
-
-    function isValidId(id) {
-      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
-    }
-
-    // Entity validator logic for UserProfile
-    function isValidUserProfile(data) {
-      return data.name is string && data.name.size() <= 128
-        && data.examType is string && (data.examType == 'BCS' || data.examType == 'Admission' || data.examType == 'SSC' || data.examType == 'HSC')
-        && data.streak is int && data.streak >= 0
-        && data.xp is int && data.xp >= 0
-        && data.level is int && data.level >= 0;
-    }
-
-    // Rules for /users/{userId}
+    // ── User profile document ──────────────────────────────────────────────
     match /users/{userId} {
-      allow get: if isOwner(userId);
-      allow create: if isOwner(userId) && isValidId(userId) && isValidUserProfile(request.resource.data);
-      allow update: if isOwner(userId) && isValidUserProfile(request.resource.data);
-      allow delete: if isOwner(userId);
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // ── Exam sessions sub-collection ─────────────────────────────────────
+      match /examSessions/{sessionId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // ── Spaced revision items sub-collection ─────────────────────────────
+      match /revisionItems/{itemId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // ── Aggregated analytics document ─────────────────────────────────────
+      match /analytics/{doc} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // ── Legacy progress path (kept for backwards compat) ──────────────────
+      match /progress/{document} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
     }
 
     // Rules for /analytics/{userId}
     match /analytics/{userId} {
-      allow get: if isOwner(userId);
-      allow write: if isOwner(userId) && isValidId(userId);
+      allow get: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId;
     }
 
     // Rules for /memory/{userId}
     match /memory/{userId} {
-      allow get: if isOwner(userId);
-      allow write: if isOwner(userId) && isValidId(userId);
+      allow get: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId;
     }
 
     // Rules for /circulars/{circularId}
     match /circulars/{circularId} {
-      allow read: if isSignedIn();
+      allow read: if request.auth != null;
       allow write: if false; // Only manageable server-side by system
+    }
+
+    // Catch-all default deny
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

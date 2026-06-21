@@ -4,6 +4,7 @@ import {
   RefreshCw, TrendingUp, AlertCircle, ArrowUpRight, BookOpen, Camera 
 } from 'lucide-react';
 import { WrittenEvaluation } from '../types';
+import { ApiClient } from '../lib/api';
 
 export default function WrittenEvaluator() {
   const [title, setTitle] = useState<string>('38th BCS Written Gen studies draft: Geopolitics of Bay of Bengal');
@@ -40,50 +41,57 @@ export default function WrittenEvaluator() {
     setEvaluation(null);
 
     try {
-      const response = await fetch('/api/ai/written-evaluate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          submissionText: draftText,
-          title,
-          subject
-        })
+      const result = await ApiClient.evaluateWritten({
+        submissionText: draftText,
+        title,
+        subject,
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        setEvaluation(result);
-      } else {
-        throw new Error("Written evaluation service offline");
-      }
+      setEvaluation({
+        id: result.id,
+        title: result.title,
+        subject: result.subject,
+        submissionText: result.submissionText,
+        scores: {
+          grammar: result.scores.grammar,
+          coherence: result.scores.coherence,
+          structure: result.scores.structure,
+          banglaCustom: result.scores.banglaCustom,
+          overall: result.scores.overall,
+        },
+        feedback: {
+          strength: result.feedback.strength,
+          gap: result.feedback.gap,
+          grammarFixes: result.feedback.grammarFixes,
+          modelComparisons: result.feedback.modelComparisons,
+        },
+        predictedScore: result.predictedScore,
+      });
     } catch (err) {
       console.error("Written evaluation failed, applying fallback mockup parser", err);
-      // Beautiful fallback evaluation
-      setTimeout(() => {
-        setEvaluation({
-          id: "m-" + Math.random(),
-          title,
-          subject,
-          submissionText: draftText,
-          scores: {
-            grammar: 8,
-            coherence: 7,
-            structure: 8,
-            banglaCustom: 9,
-            overall: 78
-          },
-          feedback: {
-            strength: "Excellent depth of factual references regarding Bangladesh's Constitution and key historical context.",
-            gap: "Structural layout lacks optimal paragraph transition signposts. Adding precise charts or flow diagrams will boost written evaluation metrics by 15%.",
-            grammarFixes: [
-              "বানান সংশোধন: 'উজ্জ্বল' বানানটি সঠিক লিখুন (উজ্জল নয়)।",
-              "Sentence structure: Keep English clauses precise when listing global geopolitical theories."
-            ],
-            modelComparisons: "Model answers typically introduce the demographic dividends and outline the 8th Five-Year Plan of Bangladesh as a concluding structural hook. Incorporate these key data metrics for extra marks."
-          },
-          predictedScore: 78
-        });
-      }, 1000);
+      setEvaluation({
+        id: "m-" + Math.random(),
+        title,
+        subject,
+        submissionText: draftText,
+        scores: {
+          grammar: 8,
+          coherence: 7,
+          structure: 8,
+          banglaCustom: 9,
+          overall: 78
+        },
+        feedback: {
+          strength: "Excellent depth of factual references regarding Bangladesh's Constitution and key historical context.",
+          gap: "Structural layout lacks optimal paragraph transition signposts. Adding precise charts or flow diagrams will boost written evaluation metrics by 15%.",
+          grammarFixes: [
+            "বানান সংশোধন: 'উজ্জ্বল' বানানটি সঠিক লিখুন (উজ্জল নয়)।",
+            "Sentence structure: Keep English clauses precise when listing global geopolitical theories."
+          ],
+          modelComparisons: "Model answers typically introduce the demographic dividends and outline the 8th Five-Year Plan of Bangladesh as a concluding structural hook. Incorporate these key data metrics for extra marks."
+        },
+        predictedScore: 78
+      });
     } finally {
       setLoadingEvaluation(false);
     }

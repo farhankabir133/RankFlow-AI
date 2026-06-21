@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "gen-lang-client-0209152403",
+    "production": "rankflow-ai-prod-99"
+  },
+  "targets": {},
+  "etags": {}
+}

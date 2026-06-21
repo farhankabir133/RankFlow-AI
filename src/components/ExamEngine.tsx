@@ -9,11 +9,15 @@ import {
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { Question, ExamSession } from '../types';
-
-interface ExamMode {
-  type: 'BCS' | 'Bank' | 'Custom';
-  role?: string; // For BB eg "Assistant Director (AD)", "Senior Officer"
-}
+import { ApiClient } from '../lib/api';
+import {
+  bcsSyllabus,
+  bankSyllabus,
+  getSubtopicsForTopic,
+  questionPool,
+  generateProceduralQuestions,
+  ExamMode,
+} from './exam/ExamData';
 
 interface ExamEngineProps {
   examType: string;
@@ -22,7 +26,7 @@ interface ExamEngineProps {
   onTriggerTutor: (subject: string, topic: string) => void;
 }
 
-// Full BCS 10-domain detailed syllabus with rich, complete topics
+/*
 const bcsSyllabus = [
   {
     name: "১. বাংলা ভাষা ও সাহিত্য",
@@ -291,6 +295,7 @@ function getSubtopicsForTopic(topicName: string): string[] {
   
   return mapping[topicName] || ["সাধারণ প্রশ্ন (General Concepts)", "ব্যাখ্যাসূত্র বিশ্লেষণ (Analytical Concepts)"];
 }
+*/
 
 export default function ExamEngine({ examType, selectedExamMode, onExamCompleted, onTriggerTutor }: ExamEngineProps) {
   
@@ -805,6 +810,7 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
   const config = getPostSpecificConfig();
 
   // Integrated Question Library mapping domains to mock items
+  /*
   const questionPool: Question[] = [
     {
       id: "bcs-bn-1",
@@ -1027,6 +1033,7 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
       }
     }
   ];
+  */
 
   // Monitor mode and load appropriate question pools or dynamic generator
   useEffect(() => {
@@ -1180,35 +1187,50 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
       }
       
       try {
-        const response = await fetch("/api/ai/adaptive-question", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            subject: currentQ.subject,
-            topic: currentQ.topic,
-            examType: currentMode.type,
-            difficulty: dynamicAdaptiveDifficulty
-          })
-        });
-        if (response.ok) {
-          const newQ = await response.json();
-          if (newQ && newQ.text && !questions.some(q => q.text === newQ.text)) {
-            setQuestions(prev => [...prev, newQ]);
-            setCurrentIdx(prev => prev + 1);
-            setSelectedAnswer(null);
-            setIsAnswerConfirmed(false);
-            setIsCertain(true);
-            setEliminatedOptions([]);
-          } else {
-            handleCompleteExam();
-          }
-        } else {
-          handleCompleteExam();
-        }
-      } catch (err) {
-        console.error("Adaptive Gen failed, calculating score", err);
-        handleCompleteExam();
-      } finally {
+        let newQ: any;
+        
+        newQ = await ApiClient.getAdaptiveQuestion({
+           subject: currentQ.subject,
+           topic: currentQ.topic,
+           examType: currentMode.type,
+           difficulty: dynamicAdaptiveDifficulty
+         });
+         
+         if (newQ && newQ.text && !questions.some(q => q.text === newQ.text)) {
+           setQuestions(prev => [...prev, newQ]);
+           setCurrentIdx(prev => prev + 1);
+           setSelectedAnswer(null);
+           setIsAnswerConfirmed(false);
+           setIsCertain(true);
+           setEliminatedOptions([]);
+         } else if (newQ && newQ.isFallback) {
+           setQuestions(prev => [...prev, newQ]);
+           setCurrentIdx(prev => prev + 1);
+           setSelectedAnswer(null);
+           setIsAnswerConfirmed(false);
+           setIsCertain(true);
+           setEliminatedOptions([]);
+         } else {
+           handleCompleteExam();
+         }
+       } catch (err: any) {
+         const errMsg = err.message || JSON.stringify(err) || '';
+         const isAuthError = errMsg.includes('401') || errMsg.includes('UNAUTHENTICATED');
+         if (isAuthError || errMsg.includes('GEMINI_OFFLINE') || errMsg.includes('GEMINI_UNCONFIGURED')) {
+           const fallbackQ = generateProceduralQuestions([{ subject: currentQ.subject || "General Studies", topic: currentQ.topic || "Syllabus", count: 1 }], dynamicAdaptiveDifficulty)[0];
+           if (fallbackQ) {
+             setQuestions(prev => [...prev, fallbackQ]);
+             setCurrentIdx(prev => prev + 1);
+             setSelectedAnswer(null);
+             setIsAnswerConfirmed(false);
+             setIsCertain(true);
+             setEliminatedOptions([]);
+           }
+         } else {
+           console.error("Adaptive Gen failed, calculating score", err);
+           handleCompleteExam();
+         }
+       } finally {
         setLoadingAdaptiveQ(false);
       }
     }
@@ -1394,10 +1416,12 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
   const handleCompileCustomExam = async () => {
     setIsCompiling(true);
     setCompilingError('');
-    
+    let allocations: { subject: string; topic: string; count: number }[] = [];
+    let data: any;
+
     try {
       // Build allocations list dynamically based on independent selected customLength & weights
-      const allocations = getNormalizedAllocations(customLength, selectedSubjects, subjectCounts, topicCounts);
+      allocations = getNormalizedAllocations(customLength, selectedSubjects, subjectCounts, topicCounts);
       
       if (allocations.length === 0) {
         setIsCompiling(false);
@@ -1405,24 +1429,15 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
         return;
       }
       
-      const response = await fetch("/api/ai/batch-questions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          examType: currentMode.type,
-          difficulty: customDifficulty,
-          allocations: allocations,
-          subtopics: selectedSubtopics,
-          questionType: selectedQuestionType,
-          examMode: selectedExamModeSetting
-        })
+      data = await ApiClient.getBatchQuestions({
+        examType: currentMode.type,
+        difficulty: customDifficulty,
+        allocations: allocations,
+        subtopics: selectedSubtopics,
+        questionType: selectedQuestionType,
+        examMode: selectedExamModeSetting
       });
       
-      if (!response.ok) {
-        throw new Error("সার্ভার থেকে প্রশ্ন তৈরিতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।");
-      }
-      
-      const data = await response.json();
       if (data && data.questions && data.questions.length > 0) {
         setQuestions(data.questions);
         setIsFallbackActive(!!data.isFallback);
@@ -1444,9 +1459,37 @@ export default function ExamEngine({ examType, selectedExamMode, onExamCompleted
       } else {
         throw new Error("এআই ইঞ্জিন কোনো প্রশ্ন উত্তর দেয়নি।");
       }
-    } catch (err: any) {
-      console.error("Batch compiling failed:", err);
-      setCompilingError(err.message || "আইটি সিস্টেমে ইন্টারনাল প্রবলেম হয়েছে। কৃত্রিম বুদ্ধিমত্তা সচল রাখতে পুনরায় ট্রাই করুন।");
+} catch (err: any) {
+        const errMsg = err.message || JSON.stringify(err) || '';
+        const isAuthError = errMsg.includes('401') || errMsg.includes('UNAUTHENTICATED') || errMsg.includes('invalid authentication');
+        
+        if (isAuthError || !data || !data.questions || data.questions.length === 0) {
+          console.warn("AI auth failed, falling back to procedural questions:", err.message);
+          const proceduralQs = generateProceduralQuestions(allocations, customDifficulty);
+          if (proceduralQs.length > 0) {
+            setQuestions(proceduralQs);
+            setIsFallbackActive(true);
+            recordSessionInHistory(proceduralQs, customDifficulty, selectedSubjects);
+            setCurrentIdx(0);
+            setSelectedAnswer(null);
+            setIsAnswerConfirmed(false);
+            setIsCertain(true);
+            setEliminatedOptions([]);
+            setAnswersSheet({});
+            setIsCustomScrollMode(true);
+            setEliminatedOptionsScroll({});
+            const totalCalculatedSeconds = proceduralQs.length * 40;
+            setSecondsRemaining(totalCalculatedSeconds);
+            setTotalTimeLimit(totalCalculatedSeconds);
+            setCompleted(false);
+            setActiveTab('simulation');
+            setCompilingError('');
+            setIsCompiling(false);
+            return;
+          }
+        }
+        console.error("Batch compiling failed:", err);
+        setCompilingError(err.message || "আইটি সিস্টেমে ইন্টারনাল প্রবলেম হয়েছে। কৃত্রিম বুদ্ধিমত্তা সচল রাখতে পুনরায় ট্রাই করুন।");
     } finally {
       setIsCompiling(false);
     }

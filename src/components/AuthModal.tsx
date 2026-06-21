@@ -10,7 +10,7 @@ interface AuthModalProps {
 }
 
 export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
-  const { signUpEmail, signInEmail, signInGoogle, signInAsGuest } = useAuth();
+  const { signUpEmail, signInEmail, signInGoogle, signInGuest } = useAuth();
   
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
@@ -65,12 +65,12 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
     setLoading(true);
     setError(null);
     try {
-      await signInAsGuest(name || email.split('@')[0] || 'Farhan Kabir (Guest)');
+      await signInGuest();
       setLoading(false);
       onSuccess();
     } catch (err: any) {
       setLoading(false);
-      setError(err?.message || 'Guest/Sandbox login failed');
+      handleAuthError(err);
     }
   };
 
