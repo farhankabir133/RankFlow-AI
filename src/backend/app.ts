@@ -58,7 +58,10 @@ app.use(express.json());
 // Apply general API rate limiter to all API endpoints
 app.use("/api/", apiLimiter);
 
-// Health check endpoint
+// Root-level health check for Railway load balancer (no rate limit)
+app.get("/health", handleHealthCheck);
+
+// Legacy API health check (kept for compatibility)
 app.get("/api/health", handleHealthCheck);
 
 // Live real-time system stats update (Simulation)
